@@ -356,7 +356,22 @@ function handleMobileAction(action) {
     if (action === 'balance') openBalanceModal();
     if (action === 'profile') openProfileModal();
 }
-
+// Mobil Axtarış Düyməsi
+function handleMobileSearchFocus() {
+    const searchBox = document.querySelector('.search-box');
+    if(searchBox) {
+        // Toggle (Aç/Bağla)
+        if(searchBox.style.display === 'flex') {
+            searchBox.style.display = 'none';
+        } else {
+            searchBox.style.display = 'flex';
+            searchBox.querySelector('input').focus();
+        }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+// Export
+window.handleMobileSearchFocus = handleMobileSearchFocus;
 // ==========================================
 // 6. PROFİL VƏ DOĞRULAMA
 // ==========================================

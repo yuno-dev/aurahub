@@ -1466,3 +1466,217 @@ button:disabled {
 @keyframes fadeOut {
     to { opacity: 0; transform: translateX(100%); }
 }
+
+/* =========================================
+   MOBİL İYİLƏŞDİRMƏLƏR (PRO VERSİYA)
+   ========================================= */
+
+/* 1. MOBİL ALT MENÜ (Sticky Bar) */
+.mobile-bottom-nav {
+    display: none; /* PC-də gizli */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(15, 23, 42, 0.95); /* Yarı şəffaf tünd */
+    backdrop-filter: blur(10px); /* Arxa planı bulanıqlaşdır */
+    border-top: 1px solid #334155;
+    z-index: 9999;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: 10px; /* iPhone çubuğu üçün yer */
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 20%;
+}
+
+.nav-item i {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+}
+
+.nav-item:active, .nav-item:hover {
+    color: #6366f1;
+}
+
+/* Ortadaki Yuvarlak Sepet Butonu */
+.center-fab .fab-circle {
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-top: -30px; /* Yukarı çıkar */
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+    border: 4px solid #0f172a; /* Arxa fon rəngi ilə eyni çərçivə */
+    position: relative;
+}
+
+.mobile-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    border: 2px solid #0f172a;
+}
+
+/* 2. MOBİL MƏHSUL GRİDİ (2 Sütunlu Görünüş) */
+@media (max-width: 768px) {
+    /* Alt menünü göstər */
+    .mobile-bottom-nav {
+        display: flex;
+    }
+
+    /* Üstteki menü butonlarını gizle (Çünkü artık altta var) */
+    .nav-actions #user-menu .btn-icon, 
+    .nav-actions #guest-menu {
+        display: none !important;
+    }
+    
+    /* Yalnızca Balans və Logo qalsın */
+    .balance-display {
+        display: block !important;
+        font-size: 0.9rem;
+        padding: 5px 10px;
+    }
+
+    /* Məhsulları 2 sütun et */
+    .grid-cols {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px;
+        padding: 0 10px; /* Kənarlardan boşluq */
+    }
+
+    /* Kart dizaynını telefona uyğunlaşdır */
+    .pro-card {
+        padding: 10px;
+    }
+    .card-top {
+        height: 60px; /* Daha yığcam */
+        margin-bottom: 10px;
+    }
+    .logo-box img {
+        width: 50px;
+        height: 50px;
+    }
+    .card-info h3 {
+        font-size: 0.9rem; /* Yazını kiçilt */
+    }
+    .card-price .price {
+        font-size: 1rem;
+    }
+    .buy-btn {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+    
+    /* Footer altda qalmasın deyə boşluq burax */
+    body {
+        padding-bottom: 80px;
+    }
+    
+    /* Axtarış düyməsinə basanda yuxarıdakı inputa fokuslansın */
+    .search-box {
+        display: none; /* Normalda gizlət */
+    }
+    .search-box.active {
+        display: flex; /* Aktiv olanda göstər */
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: #1e293b;
+        padding: 10px;
+        z-index: 99;
+    }
+}
+/* =========================================
+   MOBİL NAVBAR VƏ BALANS (FIX)
+   ========================================= */
+
+/* Navbarın Ümumi Quruluşu */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #334155;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Mobil Konteyner (Logo + Balans) */
+.nav-container-mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+/* Mobil Balans "Həbi" (Pill Design) */
+.mobile-balance-pill {
+    display: none; /* PC-də gizli */
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    padding: 6px 12px;
+    border-radius: 20px; /* Yuvarlaq künclər */
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    cursor: pointer;
+    align-items: center;
+    transition: 0.2s;
+}
+.mobile-balance-pill:active {
+    background: rgba(16, 185, 129, 0.3);
+    transform: scale(0.95);
+}
+
+/* MASAÜSTÜ ELEMENTLƏRİ TELEFONDA GİZLƏT */
+@media (max-width: 768px) {
+    .desktop-only {
+        display: none !important;
+    }
+    
+    .mobile-balance-pill {
+        display: flex !important; /* Telefonda göstər */
+    }
+
+    /* Logonu biraz kiçilt */
+    .nav-brand {
+        font-size: 1.1rem;
+    }
+    .nav-brand img {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* PC-də isə Mobil Konteyner normal div kimi davransın */
+@media (min-width: 769px) {
+    .nav-container-mobile {
+        width: auto;
+        gap: 20px;
+    }
+}

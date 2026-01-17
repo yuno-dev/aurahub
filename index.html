@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="logo.jpg" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aurahub Premium Store</title>
+    <title>Aurahub AZE</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
@@ -55,7 +55,7 @@
 
     <div id="user-section">
 
-        <nav class="navbar">
+       <nav class="navbar">
 
             <div class="nav-left">
                 <a href="#" onclick="renderUserHome()" class="nav-brand">
@@ -316,6 +316,33 @@
             <textarea id="del-text" placeholder="Kodu bura yazın..." rows="5"
                 style="width:100%; margin-bottom:10px;"></textarea>
             <button class="full-btn" onclick="submitDelivery()">Göndər</button>
+        </div>
+    </div><div class="mobile-bottom-nav">
+        <div class="nav-item" onclick="renderUserHome()">
+            <i class="fas fa-home"></i>
+            <span>Ana Səhifə</span>
+        </div>
+        
+        <div class="nav-item" onclick="handleMobileSearchFocus()">
+            <i class="fas fa-search"></i>
+            <span>Axtar</span>
+        </div>
+        
+        <div class="nav-item center-fab" onclick="openCart()">
+            <div class="fab-circle">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="badge mobile-badge">0</span>
+            </div>
+        </div>
+        
+        <div class="nav-item" onclick="openUserOrders()">
+            <i class="fas fa-box"></i>
+            <span>Sifariş</span>
+        </div>
+        
+        <div class="nav-item" onclick="openProfileModal()">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
         </div>
     </div>
 
