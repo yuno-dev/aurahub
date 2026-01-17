@@ -1679,4 +1679,41 @@ button:disabled {
         width: auto;
         gap: 20px;
     }
+}/* =========================================
+   PC VƏ MOBİL AYIRMA (FIX)
+   ========================================= */
+
+/* 1. MOBİL ALT MENYUNU PC-DƏ GİZLƏT */
+.mobile-bottom-nav {
+    display: none !important; /* PC-də əsla görünməsin */
+}
+
+/* 2. MOBİL BALANS QUTUSUNU PC-DƏ GİZLƏT */
+.mobile-balance-pill {
+    display: none !important;
+}
+
+/* 3. LOGO DÜZƏLİŞİ (Dublikat olmasın) */
+.nav-container-mobile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* === YALNIZ TELEFONDA İŞƏ DÜŞƏN KODLAR === */
+@media (max-width: 768px) {
+    /* Alt menyunu telefonda göstər */
+    .mobile-bottom-nav {
+        display: flex !important;
+    }
+
+    /* Mobil Balansı telefonda göstər */
+    .mobile-balance-pill {
+        display: flex !important;
+    }
+
+    /* Masaüstü elementləri telefonda gizlət */
+    .desktop-only {
+        display: none !important;
+    }
 }
