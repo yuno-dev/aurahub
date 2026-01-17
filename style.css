@@ -1723,46 +1723,11 @@ button:disabled {
     font-size: 0.85rem;
     margin-top: 8px;
     font-weight: 500;
-
-}
-/* =========================================
-   MOBİL MODAL DÜZƏLİŞİ (FİNAL)
-   ========================================= */
-@media (max-width: 768px) {
-    /* Modalı ekranın ortasına amma biraz yuxarı çək */
-    .modal-overlay {
-        align-items: flex-start !important; /* Yuxarıdan başlasın */
-        padding-top: 50px !important;
-        padding-bottom: 100px !important; /* Aşağıda menyu üçün yer qalsın */
-        overflow-y: auto !important; /* Ekran balaca olsa sürüşdür */
-    }
-
-    .modal-box {
-        margin: 0 auto 20px auto !important; /* Ortala və aşağıdan arala */
-        max-height: 80vh !important; /* Ekranın 80%-dən çox yer tutmasın */
-        overflow-y: auto !important; /* İçindəki yazı çoxdursa scroll olsun */
-        width: 90% !important; /* Kənarlardan biraz boşluq olsun */
-        position: relative; 
-        z-index: 10002; /* Menyudan yuxarıda olsun */
-    }
-
-    /* Alt Menyu hər zaman ən üstdə görünsün desən (və ya modalın altında qalsın) */
-    /* Biz modalı yuxarı çəkdik deyə artıq problem olmayacaq */
-}
-/* Axtarış Qutusu Aktiv Olanda */
-.search-box.mobile-active {
-    display: flex !important;
-    top: 70px !important; /* Menyunun altından çıxsın */
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-}
-
-/* Axtarış Qutusu - Mobil Aktiv Görünüş */
+}/* Mobil Axtarış Qutusu */
 .search-box.mobile-active {
     display: flex !important;
     position: absolute;
-    top: 75px; /* Navbarın altı */
+    top: 75px;
     left: 5%;
     width: 90%;
     background: #1e293b;
@@ -1774,10 +1739,4 @@ button:disabled {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
-}
-
-/* Mobil Menyu İkonları */
-.nav-item {
-    cursor: pointer;
-    z-index: 10001; /* Hər şeyin üstündə olsun */
 }
