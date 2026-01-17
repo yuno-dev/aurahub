@@ -5,49 +5,71 @@
 // 🔴 BURAYA ÖZ DEPLOY LİNKİNİZİ YAPIŞDIRIN! (Dırnaqları silməyin)
 const API_URL = "https://script.google.com/macros/s/AKfycbyu5hOghZRLt9_8mKHBh1PvtXKPR-3dQL_xqCqBjGIjPxcfYf8NM8UMOzyiPlTPC9XM7Q/exec";
 
-
-// SABİT KATEQORİYALAR
+// YENİ KATEQORİYALAR (Sənin Logolarınla)
 const DEFAULT_CATS = [
+    { id: 'efootball', name: 'eFootball', img: 'img/efootball.png', sub: 'eFootball Coin' },
+    { id: 'gemini', name: 'Gemini AI', img: 'img/gemini.png', sub: 'Premium AI' },
+    { id: 'pubg', name: 'PUBG Mobile', img: 'img/pubg.png', sub: 'UC Paketləri' },
+    { id: 'minecraft', name: 'Minecraft', img: 'img/minecraft.png', sub: 'Java & Bedrock' },
     { id: 'netflix', name: 'Netflix', img: 'img/netflix.png', sub: 'Film & Serial' },
-    { id: 'spotify', name: 'Spotify', img: 'img/spotify.png', sub: 'Musiqi & Podkast' },
-    { id: 'valorant', name: 'Valorant', img: 'img/valorant.png', sub: 'Oyun Kodu (VP)' },
-    { id: 'minecraft', name: 'Minecraft', img: 'img/minecraft.png', sub: 'Premium Hesab' },
-    { id: 'pubg', name: 'PUBG Mobile', img: 'img/pubg.png', sub: 'UC Yükləmə' }
+    { id: 'spotify', name: 'Spotify', img: 'img/spotify.png', sub: 'Musiqi Keyfi' },
+    { id: 'steam', name: 'Steam', img: 'img/steam.png', sub: 'Cüzdan Kodu' },
+    { id: 'valorant', name: 'Valorant', img: 'img/valorant.png', sub: 'VP Paketləri' },
+    { id: 'youtube', name: 'YouTube', img: 'img/youtube.png', sub: 'Premium Üzvlük' }
 ];
 
-// SABİT MƏHSULLAR
+// YENİ MƏHSULLAR (Hər Kateqoriyada 1 Ədəd)
 const DEFAULT_PRODS = [
-    { id: 101, catId: 'netflix', name: 'Netflix 1 Ay (UHD)', price: 6, desc: '4K Ultra HD • Özəl Profil' },
-    { id: 102, catId: 'netflix', name: 'Netflix 3 Ay (UHD)', price: 15, desc: '3 Ay Kəsintisiz • Tam Zəmanət' },
-    { id: 201, catId: 'spotify', name: 'Spotify 1 Ay', price: 5, desc: 'Fərdi Plan • Reklamsız' },
-    { id: 301, catId: 'valorant', name: '115 VP', price: 2.5, desc: 'TR Server • Anında Təslim' },
-    { id: 302, catId: 'valorant', name: '1250 VP', price: 18.5, desc: 'TR Server • Rəsmi Kod' },
-    { id: 501, catId: 'pubg', name: '60 UC', price: 2, desc: 'Global ID Yükləmə' }
+    // eFootball
+    { id: 101, catId: 'efootball', name: '1050 eFootball Coin', price: 12.5, desc: 'Mobil və PC uyğun • Sürətli Yükləmə' },
+
+    // Gemini
+    { id: 201, catId: 'gemini', name: 'Gemini Advanced 1 Ay', price: 25, desc: 'Google AI Premium • Ən Güclü Model' },
+
+    // PUBG
+    { id: 301, catId: 'pubg', name: '60 UC', price: 2, desc: 'Global ID Yükləmə • Bonuslu' },
+
+    // Minecraft
+    { id: 401, catId: 'minecraft', name: 'Minecraft Premium', price: 35, desc: 'Orijinal Java & Bedrock Edition • Tam Hesab' },
+
+    // Netflix
+    { id: 501, catId: 'netflix', name: 'Netflix 1 Ay (4K)', price: 6, desc: 'Ultra HD • Şəxsi Profil • Zəmanətli' },
+
+    // Spotify
+    { id: 601, catId: 'spotify', name: 'Spotify Individual 1 Ay', price: 5, desc: 'Reklamsız Musiqi • Fərdi Plan' },
+
+    // Steam
+    { id: 701, catId: 'steam', name: 'Steam 10$ Kodu', price: 18, desc: 'USD Cüzdan Kodu • Qlobal Aktivasiya' },
+
+    // Valorant
+    { id: 801, catId: 'valorant', name: '115 VP', price: 2.5, desc: 'TR Server • Anında Çatdırılma' },
+
+    // YouTube
+    { id: 901, catId: 'youtube', name: 'YouTube Premium 1 Ay', price: 4, desc: 'Reklamsız Video • Arxa Planda Oynatma' }
 ];
 
 // Qlobal Dəyişənlər
 let db = { products: DEFAULT_PRODS, categories: DEFAULT_CATS, orders: [], balance_requests: [], users: [] };
 let currentUser = null;
 let cart = [];
-
 // ==========================================
 // 2. TOAST BİLDİRİŞ SİSTEMİ
 // ==========================================
 
 function showToast(msg, type = 'info') {
     const container = document.getElementById('toast-container');
-    if (!container) return; 
+    if (!container) return;
 
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    
+
     let icon = 'fa-info-circle';
     if (type === 'success') icon = 'fa-check-circle';
     if (type === 'error') icon = 'fa-exclamation-circle';
 
     toast.innerHTML = `<i class="fas ${icon}" style="margin-right:10px;"></i> ${msg}`;
     container.appendChild(toast);
-    
+
     setTimeout(() => {
         toast.style.animation = "fadeOut 0.4s ease forwards";
         setTimeout(() => toast.remove(), 400);
@@ -79,75 +101,73 @@ async function sendRequest(data) {
 // ==========================================
 // MƏLUMAT SƏHİFƏLƏRİ (FOOTER)
 // ==========================================
-// ==========================================
-// MƏLUMAT PƏNCƏRƏLƏRİ (FOOTER ÜÇÜN)
-// ==========================================
 function openInfoModal(type) {
-    // Modalı yarat (əgər yoxdursa)
-    if(!document.getElementById('modal-overlay')) createModalHTML();
+    if (!document.getElementById('modal-overlay')) createModalHTML();
 
     let title = "";
     let content = "";
 
+    // Mətnlər buradadır (İstədiyin vaxt dəyişə bilərsən)
     if (type === 'about') {
         title = "Biz Kimik?";
         content = `
             <p>Aurahub, rəqəmsal dünyada ən sərfəli qiymətə oyun kodları, abunəliklər və premium hesablar təklif edən etibarlı platformadır.</p>
-            <p>Məqsədimiz müştərilərimizə sürətli, təhlükəsiz və keyfiyyətli xidmət göstərməkdir.</p>
+            <p>Məqsədimiz müştərilərimizə sürətli, təhlükəsiz və keyfiyyətli xidmət göstərməkdir. 7/24 Dəstək xidmətimizlə hər zaman yanınızdayıq.</p>
         `;
-    } 
+    }
     else if (type === 'terms') {
         title = "İstifadə Qaydaları";
         content = `
             <div style="text-align:left; color:#cbd5e1;">
-                <p><i class="fas fa-clock" style="color:#f59e0b;"></i> <b>Çatdırılma:</b> Sifarişiniz <b>maksimum 1 saat</b> ərzində təslim edilir.</p>
+                <p><i class="fas fa-clock" style="color:#f59e0b;"></i> <b>Çatdırılma Müddəti:</b> Məhsulu aldıqdan sonra və ya balans artırdıqdan sonra sifarişiniz <b>maksimum 1 saat</b> ərzində "Sifarişlərim" bölməsinə və ya balansınıza yüklənir.</p>
                 <hr style="border-color:#334155; margin:10px 0;">
-                <p>Əgər 1 saat keçdiyi halda məhsul gəlməyibsə, dərhal Whatsapp və ya Instagram üzərindən əlaqə saxlayın.</p>
+                <p><i class="fas fa-headset" style="color:#6366f1;"></i> <b>Dəstək:</b> Əgər 1 saat keçdiyi halda məhsul gəlməyibsə və ya balans oturmayıbsa, dərhal aşağıdakı kanallardan bizimlə əlaqə saxlayın:</p>
+                <ul style="margin-top:10px; list-style:none;">
+                    <li><i class="fab fa-whatsapp"></i> Whatsapp Dəstək</li>
+                    <li><i class="fab fa-instagram"></i> Instagram (@aurahub)</li>
+                </ul>
             </div>
         `;
-    } 
+    }
     else if (type === 'privacy') {
         title = "Məxfilik Siyasəti";
         content = `
-            <p>İstifadəçilərin şəxsi məlumatları (Gmail, şifrə) tamamilə məxfi saxlanılır və üçüncü tərəflərlə paylaşılmır.</p>
+            <p>İstifadəçilərin şəxsi məlumatları (Gmail, şifrə və ödəniş çekləri) tamamilə məxfi saxlanılır.</p>
+            <p>Aurahub, istifadəçi məlumatlarını heç bir üçüncü tərəflə paylaşmır. Daxil etdiyiniz məlumatlar yalnız sifarişin icrası üçün istifadə olunur.</p>
         `;
-    } 
+    }
     else if (type === 'refund') {
         title = "Geri Qaytarma Siyasəti";
         content = `
             <div style="text-align:left; color:#cbd5e1;">
-                <p style="color:#ef4444; font-weight:bold;">Vacib Şərtlər:</p>
+                <p style="color:#ef4444; font-weight:bold;"><i class="fas fa-exclamation-circle"></i> Vacib Şərtlər:</p>
                 <ul style="margin-left:20px; margin-top:10px;">
-                    <li style="margin-bottom:10px;">Geri ödəniş <b>YALNIZ</b> biz tərəfdən verilən şifrə yanlış çıxarsa edilir.</li>
-                    <li>Hesab ayarlarında (Şifrə, Profil, Dil) dəyişiklik edilərsə zəmanət ləğv olunur və istifadəçi bloklanır.</li>
+                    <li style="margin-bottom:10px;">Geri ödəniş və ya dəyişim <b>YALNIZ</b> biz tərəfdən verilən hesabın şifrəsi yanlış çıxarsa edilir.</li>
+                    <li style="margin-bottom:10px;">Hesaba daxil olduqdan sonra ayarlarda (Profil adı, Şifrə, Plan, Dil və s.) hər hansı bir dəyişiklik edilərsə:
+                        <br><span style="color:#ef4444;">- Zəmanət ləğv olunur.</span>
+                        <br><span style="color:#ef4444;">- Geri ödəniş edilmir.</span>
+                        <br><span style="color:#ef4444;">- İstifadəçi bloklanır.</span>
+                    </li>
                 </ul>
             </div>
         `;
     }
 
-    // Modalı Doldur və Aç
-    const modalContent = document.getElementById('modal-dynamic-content');
-    if(modalContent) {
-        modalContent.innerHTML = `
-            <h2 style="color:white; margin-bottom:15px; border-bottom:1px solid #334155; padding-bottom:10px;">${title}</h2>
-            <div style="font-size:0.95rem; line-height:1.6; color:#94a3b8;">${content}</div>
-        `;
-        document.getElementById('modal-overlay').style.display = 'flex';
-    } else {
-        console.error("Xəta: 'modal-dynamic-content' tapılmadı.");
-    }
-}
+    // Modalı Aç
+    const html = `<h2 style="color:white; margin-bottom:20px; border-bottom:1px solid #334155; padding-bottom:10px;">${title}</h2>
+                  <div style="font-size:0.95rem; line-height:1.6; color:#94a3b8;">${content}</div>`;
 
-// BU SƏTİR ÇOX VACİBDİR (HTML-in funksiyanı görməsi üçün)
-window.openInfoModal = openInfoModal;
+    document.getElementById('modal-dynamic-content').innerHTML = html;
+    document.getElementById('modal-overlay').style.display = 'flex';
+}
 // ==========================================
 // 4. INIT (BAŞLATMA)
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Düymələri aktiv et
-    const b1 = document.getElementById('btn-login'); if(b1) { b1.disabled=false; b1.innerText="Giriş Et"; }
-    const b2 = document.getElementById('btn-register'); if(b2) { b2.disabled=false; b2.innerText="Qeydiyyatdan Keç"; }
+    const b1 = document.getElementById('btn-login'); if (b1) { b1.disabled = false; b1.innerText = "Giriş Et"; }
+    const b2 = document.getElementById('btn-register'); if (b2) { b2.disabled = false; b2.innerText = "Qeydiyyatdan Keç"; }
 
     toggleLoading(true);
 
@@ -159,13 +179,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateUserUI(); // Yaddaşdakı balansı göstər (Məsələn 0 ola bilər)
 
         // 2. SERVERDƏN ƏN SON BALANSI YÜKLƏ (VACİB HİSSƏ)
-        if(currentUser.username && currentUser.password) {
+        if (currentUser.username && currentUser.password) {
             try {
                 // Login sorğusu əslində məlumatları təzələmək üçündür
-                const res = await sendRequest({ 
-                    action: "login", 
-                    username: currentUser.username, 
-                    password: currentUser.password 
+                const res = await sendRequest({
+                    action: "login",
+                    username: currentUser.username,
+                    password: currentUser.password
                 });
 
                 if (res.status === "success") {
@@ -173,21 +193,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const savedPass = currentUser.password; // Şifrəni qoruyuruq
                     currentUser = res.user;
                     currentUser.password = savedPass;
-                    
+
                     // Təzə məlumatı yaddaşa yaz
                     localStorage.setItem('activeUser', JSON.stringify(currentUser));
-                    
+
                     // VƏ EKRANI YENİLƏ (Burada 0.00 dəyişib real rəqəm olmalıdır)
                     updateUserUI();
                     showToast("Məlumatlar yeniləndi", "success");
                 }
-            } catch(e) { 
-                console.log("Serverlə əlaqə yoxdur, köhnə balans qaldı."); 
+            } catch (e) {
+                console.log("Serverlə əlaqə yoxdur, köhnə balans qaldı.");
             }
         }
     }
 
-    try { const res = await sendRequest({ action: "getPublicData" }); } catch(e) {}
+    try { const res = await sendRequest({ action: "getPublicData" }); } catch (e) { }
 
     toggleLoading(false);
     createModalHTML();
@@ -196,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 function toggleLoading(show) {
     const overlay = document.getElementById('loading-overlay');
-    if(overlay) overlay.style.display = show ? 'flex' : 'none';
+    if (overlay) overlay.style.display = show ? 'flex' : 'none';
 }
 
 // ==========================================
@@ -215,32 +235,32 @@ function checkSession() {
 
     if (currentUser) {
         // --- İSTİFADƏÇİ VAR ---
-        
-        if(currentUser.role === 'admin') {
+
+        if (currentUser.role === 'admin') {
             // A) ƏGƏR ADMİNDİRSƏ -> Mağazanı tamamilə gizlət, Admini aç
-            if(userSec) userSec.classList.add('hidden');
-            if(adminSec) adminSec.classList.remove('hidden');
-            
+            if (userSec) userSec.classList.add('hidden');
+            if (adminSec) adminSec.classList.remove('hidden');
+
             // Admin datasını yüklə
             fetchAdminData();
         } else {
             // B) ƏGƏR ADİ USERDİRSƏ -> Admini gizlət, Mağazanı aç
-            if(adminSec) adminSec.classList.add('hidden');
-            if(userSec) userSec.classList.remove('hidden');
-            
+            if (adminSec) adminSec.classList.add('hidden');
+            if (userSec) userSec.classList.remove('hidden');
+
             // Menyu ayarları
-            if(guestMenu) guestMenu.classList.add('hidden');
-            if(userMenu) userMenu.classList.remove('hidden');
-            
+            if (guestMenu) guestMenu.classList.add('hidden');
+            if (userMenu) userMenu.classList.remove('hidden');
+
             updateUserUI();
         }
     } else {
         // --- QONAQDIRSA (GİRİŞ YOXDUR) ---
-        if(adminSec) adminSec.classList.add('hidden'); // Admini gizlət
-        if(userSec) userSec.classList.remove('hidden'); // Mağazanı aç
-        
-        if(guestMenu) guestMenu.classList.remove('hidden');
-        if(userMenu) userMenu.classList.add('hidden');
+        if (adminSec) adminSec.classList.add('hidden'); // Admini gizlət
+        if (userSec) userSec.classList.remove('hidden'); // Mağazanı aç
+
+        if (guestMenu) guestMenu.classList.remove('hidden');
+        if (userMenu) userMenu.classList.add('hidden');
     }
 }
 // Admin paneldən mağazaya keçid
@@ -257,7 +277,7 @@ async function handleAuth(e) {
     e.preventDefault();
     const u = document.getElementById('login-username').value.trim();
     const p = document.getElementById('login-password').value.trim();
-    
+
     toggleLoading(true);
     const result = await sendRequest({ action: "login", username: u, password: p });
     toggleLoading(false);
@@ -267,8 +287,8 @@ async function handleAuth(e) {
         localStorage.setItem('activeUser', JSON.stringify(currentUser));
         showToast(`Xoş gəldiniz, ${currentUser.username}!`, "success");
         checkSession();
-    } else { 
-        showToast(result.message || "Giriş uğursuz.", "error"); 
+    } else {
+        showToast(result.message || "Giriş uğursuz.", "error");
     }
 }
 
@@ -288,8 +308,8 @@ async function handleRegister(e) {
         showToast("Qeydiyyat uğurludur!", "success");
         checkSession();
         setTimeout(openProfileModal, 1000);
-    } else { 
-        showToast(result.message, "error"); 
+    } else {
+        showToast(result.message, "error");
     }
 }
 
@@ -297,12 +317,12 @@ function logout() { localStorage.clear(); location.reload(); }
 function switchAuth(type) {
     const l = document.getElementById('login-form-container');
     const r = document.getElementById('register-form-container');
-    if(type === 'register') { l.classList.add('hidden'); r.classList.remove('hidden'); }
+    if (type === 'register') { l.classList.add('hidden'); r.classList.remove('hidden'); }
     else { r.classList.add('hidden'); l.classList.remove('hidden'); }
 }
 function updateUserUI() {
-    if(!currentUser) return;
-    
+    if (!currentUser) return;
+
     // Balansı yoxlayırıq (Əgər null və ya undefined gələrsə 0 götürsün)
     let safeBalance = 0;
     if (currentUser.balance !== undefined && currentUser.balance !== null) {
@@ -311,20 +331,20 @@ function updateUserUI() {
 
     // 1. Masaüstü Balansı Tap və Yenilə
     const desktopBal = document.getElementById('user-balance-display');
-    if(desktopBal) {
+    if (desktopBal) {
         desktopBal.innerHTML = `${safeBalance.toFixed(2)} ₼`;
     }
-    
+
     // 2. Mobil Balansı Tap və Yenilə (Xüsusi Yoxlama)
     const mobileBal = document.getElementById('mobile-balance-display');
-    if(mobileBal) {
+    if (mobileBal) {
         mobileBal.innerHTML = `${safeBalance.toFixed(2)} ₼`;
         // Görünmürsə məcbur göstər (CSS problemi varsa)
         mobileBal.style.display = (window.innerWidth <= 768) ? 'block' : 'none';
     } else {
         console.warn("XƏTA: 'mobile-balance-display' ID-li element tapılmadı! HTML-i yoxlayın.");
     }
-    
+
     // 3. Səbət Sayğacı
     document.querySelectorAll('.badge').forEach(b => b.innerText = cart.length);
 }
@@ -341,17 +361,17 @@ function handleMobileAction(action) {
 // 6. PROFİL VƏ DOĞRULAMA
 // ==========================================
 function openProfileModal() {
-    if(!currentUser) return openAuth();
+    if (!currentUser) return openAuth();
     const currentEmail = currentUser.email || "Yoxdur";
     document.getElementById('profile-email').value = currentEmail;
-    
+
     const badge = document.getElementById('verify-badge');
     const btnVerify = document.getElementById('btn-verify-current');
-    
+
     document.getElementById('verify-section').classList.add('hidden');
     document.getElementById('change-email-section').classList.add('hidden');
 
-    if(currentUser.isVerified) {
+    if (currentUser.isVerified) {
         badge.innerHTML = `<i class="fas fa-check-circle"></i> Təsdiqlənib`;
         badge.style.background = "#10b981";
         btnVerify.style.display = 'none';
@@ -370,9 +390,9 @@ function toggleChangeEmail() { document.getElementById('change-email-section').c
 async function verifyCurrentEmail() {
     const btn = document.getElementById('btn-verify-current');
     btn.innerText = "Göndərilir..."; btn.disabled = true;
-    
+
     const res = await sendRequest({ action: "updateEmailRequest", userId: currentUser.id, newEmail: currentUser.email });
-    if(res.status === "success") {
+    if (res.status === "success") {
         showToast("Kod göndərildi!", "success");
         document.getElementById('verify-section').classList.remove('hidden');
         btn.innerText = "Kod Göndərildi ✔";
@@ -387,10 +407,10 @@ async function verifyCurrentEmail() {
 async function updateEmail() {
     const newEmail = document.getElementById('new-email').value.trim();
     const btn = document.querySelector('#change-email-section button');
-    
+
     btn.innerText = "..."; btn.disabled = true;
     const res = await sendRequest({ action: "updateEmailRequest", userId: currentUser.id, newEmail: newEmail });
-    if(res.status === "success") {
+    if (res.status === "success") {
         showToast("Kod göndərildi!", "success");
         document.getElementById('verify-section').classList.remove('hidden');
         currentUser.tempEmail = newEmail;
@@ -406,10 +426,10 @@ async function updateEmail() {
 async function verifyCode() {
     const code = document.getElementById('verify-code').value.trim();
     const res = await sendRequest({ action: "verifyEmailCode", userId: currentUser.id, code: code });
-    if(res.status === "success") {
+    if (res.status === "success") {
         showToast("Təsdiqləndi!", "success");
         currentUser.isVerified = true;
-        if(currentUser.tempEmail) { currentUser.email = currentUser.tempEmail; delete currentUser.tempEmail; }
+        if (currentUser.tempEmail) { currentUser.email = currentUser.tempEmail; delete currentUser.tempEmail; }
         localStorage.setItem('activeUser', JSON.stringify(currentUser));
         openProfileModal();
     } else { showToast(res.message, "error"); }
@@ -436,7 +456,7 @@ function startCountdown(btn, seconds) {
 function renderUserHome() {
     const v = document.getElementById('user-view');
     let html = `<div class="hero-section"><div class="hero-wrapper"><div class="hero-slide active" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);"><div class="hero-content"><div class="hero-title">AURAHUB</div><div class="hero-desc">Premium Mağaza</div></div></div></div></div>`;
-    
+
     html += `<div class="container"><h2 class="section-title">Kəşf Et</h2><div class="grid-cols">`;
     DEFAULT_CATS.forEach(c => {
         html += `
@@ -461,7 +481,7 @@ function renderCategoryProducts(catId) {
             <h2 class="section-title">${cat ? cat.name : 'Məhsullar'} <span>Paketləri</span></h2>
             <div class="grid-cols">`;
 
-    if(prods.length === 0) {
+    if (prods.length === 0) {
         html += `<p style="color:#94a3b8; grid-column: 1/-1; text-align:center;">Məhsul yoxdur.</p>`;
     } else {
         prods.forEach(p => {
@@ -492,7 +512,7 @@ async function handleAuth(e) {
     e.preventDefault();
     const u = document.getElementById('login-username').value.trim();
     const p = document.getElementById('login-password').value.trim();
-    
+
     toggleLoading(true);
     const result = await sendRequest({ action: "login", username: u, password: p });
     toggleLoading(false);
@@ -500,24 +520,24 @@ async function handleAuth(e) {
     if (result.status === "success") {
         currentUser = result.user;
         // KRİTİK NOKTA: Şifreyi de objeye ekleyip kaydediyoruz
-        currentUser.password = p; 
+        currentUser.password = p;
         localStorage.setItem('activeUser', JSON.stringify(currentUser));
-        
+
         showToast(`Xoş gəldiniz, ${currentUser.username}!`, "success");
         checkSession();
-    } else { 
-        showToast(result.message || "Giriş uğursuz.", "error"); 
+    } else {
+        showToast(result.message || "Giriş uğursuz.", "error");
     }
 }
 
 function openDetail(id) {
     const p = db.products.find(x => String(x.id) === String(id));
-    if(!p) return;
+    if (!p) return;
     const cat = DEFAULT_CATS.find(c => String(c.id) === String(p.catId));
 
     const modal = document.getElementById('dynamic-modal');
     const content = document.getElementById('dynamic-content');
-    if(modal && content) {
+    if (modal && content) {
         content.innerHTML = `
             <div class="modal-grid">
                 <div class="modal-img-area">
@@ -537,14 +557,14 @@ function openDetail(id) {
 function addToCart(id) {
     if (!currentUser) { showToast("Giriş edin!", "error"); openAuth(); return; }
     const p = db.products.find(x => String(x.id) === String(id));
-    if(p) { cart.push(p); updateUserUI(); closeModal(); showToast("Səbətə atıldı!", "success"); }
+    if (p) { cart.push(p); updateUserUI(); closeModal(); showToast("Səbətə atıldı!", "success"); }
 }
 
 function openCart() {
-    if(!document.getElementById('modal-overlay')) createModalHTML();
+    if (!document.getElementById('modal-overlay')) createModalHTML();
     let html = `<h2 style="color:white; margin-bottom:15px;">Səbət</h2>`;
-    
-    if(cart.length === 0) {
+
+    if (cart.length === 0) {
         html += `<p style="color:#94a3b8; text-align:center;">Boşdur.</p>`;
     } else {
         let total = 0;
@@ -560,7 +580,7 @@ function openCart() {
         });
         html += `<h3 style="color:white; text-align:right; margin-top:20px;">Cəmi: ${total.toFixed(2)} ₼</h3><button class="full-btn" onclick="checkout()" style="margin-top:15px;">Təsdiqlə</button>`;
     }
-    
+
     document.getElementById('modal-dynamic-content').innerHTML = html;
     document.getElementById('modal-overlay').style.display = 'flex';
 }
@@ -570,31 +590,31 @@ function removeFromCart(idx) {
     updateUserUI();
 }
 async function checkout() {
-    if(!currentUser) return openAuth();
-    if(!currentUser.isVerified) { closeModal(); showToast("Hesabı təsdiqləyin!","error"); return openProfileModal(); }
-    if(cart.length===0) return;
-    
-    const total = cart.reduce((a,b)=>a+Number(b.price),0);
-    if(currentUser.balance < total) return showToast("Balans çatmır!", "error");
-    
-    if(confirm(`${total} ₼ ödənilsin?`)) {
+    if (!currentUser) return openAuth();
+    if (!currentUser.isVerified) { closeModal(); showToast("Hesabı təsdiqləyin!", "error"); return openProfileModal(); }
+    if (cart.length === 0) return;
+
+    const total = cart.reduce((a, b) => a + Number(b.price), 0);
+    if (currentUser.balance < total) return showToast("Balans çatmır!", "error");
+
+    if (confirm(`${total} ₼ ödənilsin?`)) {
         const btn = document.querySelector('#modal-dynamic-content .full-btn');
         btn.innerText = "Gözləyin..."; btn.disabled = true;
 
-        const res = await sendRequest({ 
-            action: "saveOrder", 
+        const res = await sendRequest({
+            action: "saveOrder",
             userId: currentUser.id,
             newBalance: currentUser.balance - total,
-            orders: cart.map(i => ({ id: Date.now()+Math.random(), userId: currentUser.id, prodName: i.name, price: i.price, date: new Date().toLocaleString(), status:'Gözləyir', deliveryData:'' }))
+            orders: cart.map(i => ({ id: Date.now() + Math.random(), userId: currentUser.id, prodName: i.name, price: i.price, date: new Date().toLocaleString(), status: 'Gözləyir', deliveryData: '' }))
         });
 
-        if(res.status==='success') { 
-            currentUser.balance-=total; 
-            localStorage.setItem('activeUser',JSON.stringify(currentUser)); 
-            cart=[]; 
-            updateUserUI(); 
-            closeModal(); 
-            showToast("Sifariş alındı!", "success"); 
+        if (res.status === 'success') {
+            currentUser.balance -= total;
+            localStorage.setItem('activeUser', JSON.stringify(currentUser));
+            cart = [];
+            updateUserUI();
+            closeModal();
+            showToast("Sifariş alındı!", "success");
         } else {
             showToast("Xəta baş verdi.", "error");
             btn.innerText = "Təsdiqlə"; btn.disabled = false;
@@ -603,20 +623,20 @@ async function checkout() {
 }
 
 async function openUserOrders() {
-    if(!currentUser) return openAuth();
-    if(!document.getElementById('modal-overlay')) createModalHTML();
-    
+    if (!currentUser) return openAuth();
+    if (!document.getElementById('modal-overlay')) createModalHTML();
+
     const res = await sendRequest({ action: "getUserOrders", userId: currentUser.id });
     const ords = res.orders ? res.orders.reverse() : [];
-    
+
     let html = `<h2 style="color:white; margin-bottom:15px;">Sifarişlərim</h2><div style="max-height:400px;overflow-y:auto">`;
-    if(ords.length === 0) html += `<p style="color:#94a3b8; text-align:center;">Sifariş yoxdur.</p>`;
+    if (ords.length === 0) html += `<p style="color:#94a3b8; text-align:center;">Sifariş yoxdur.</p>`;
     else {
         ords.forEach(o => {
-            const status = o.deliveryData 
-                ? `<div style="margin-top:5px; background:rgba(16, 185, 129, 0.2); color:#10b981; padding:5px; border-radius:5px; font-size:0.9rem;">Kod: <b>${o.deliveryData}</b></div>` 
+            const status = o.deliveryData
+                ? `<div style="margin-top:5px; background:rgba(16, 185, 129, 0.2); color:#10b981; padding:5px; border-radius:5px; font-size:0.9rem;">Kod: <b>${o.deliveryData}</b></div>`
                 : `<div style="margin-top:5px; color:#f59e0b; font-size:0.9rem;">Gözləyir...</div>`;
-            
+
             html += `<div style="background:#1e293b; margin-bottom:10px; padding:15px; border-radius:10px;">
                         <div style="display:flex; justify-content:space-between; color:white; font-weight:bold;">
                             <span>${o.prodName}</span>
@@ -627,29 +647,29 @@ async function openUserOrders() {
                      </div>`;
         });
     }
-    document.getElementById('modal-dynamic-content').innerHTML = html+`</div>`;
+    document.getElementById('modal-dynamic-content').innerHTML = html + `</div>`;
     document.getElementById('modal-overlay').style.display = 'flex';
 }
 
 function openBalanceModal() {
-    if(!currentUser) return openAuth();
-    if(!currentUser.isVerified) { showToast("Hesabı təsdiqləyin!","error"); return openProfileModal(); }
+    if (!currentUser) return openAuth();
+    if (!currentUser.isVerified) { showToast("Hesabı təsdiqləyin!", "error"); return openProfileModal(); }
     document.getElementById('balance-modal').style.display = 'flex';
 }
 
 async function submitBalanceRequest() {
     const a = document.getElementById('bal-amount').value;
     const l = document.getElementById('bal-proof-link').value;
-    if(!a || !l) return showToast("Xanaları doldurun!", "error");
-    
+    if (!a || !l) return showToast("Xanaları doldurun!", "error");
+
     const btn = document.querySelector('#balance-modal .full-btn');
     btn.innerText = "Göndərilir..."; btn.disabled = true;
 
-    const res = await sendRequest({ action:"requestBalance", userId:currentUser.id, username:currentUser.username, amount:a, proof:l });
-    
-    if(res.status==='success') { 
-        showToast("Sorğu göndərildi!","success"); 
-        closeModal('balance-modal'); 
+    const res = await sendRequest({ action: "requestBalance", userId: currentUser.id, username: currentUser.username, amount: a, proof: l });
+
+    if (res.status === 'success') {
+        showToast("Sorğu göndərildi!", "success");
+        closeModal('balance-modal');
         btn.innerText = "Sorğu Göndər"; btn.disabled = false;
         document.getElementById('bal-amount').value = '';
         document.getElementById('bal-proof-link').value = '';
@@ -664,9 +684,9 @@ async function submitBalanceRequest() {
 // ==========================================
 
 async function fetchAdminData() {
-    if(!currentUser || currentUser.role !== 'admin') return;
+    if (!currentUser || currentUser.role !== 'admin') return;
     const result = await sendRequest({ action: "getAdminData", role: currentUser.role });
-    if(result.status !== 'error') {
+    if (result.status !== 'error') {
         db.users = result.users || [];
         db.orders = result.orders || [];
         db.balance_requests = result.balance_requests || [];
@@ -680,7 +700,7 @@ function renderAdminDashboard() {
         <div class="dashboard-grid">
             <div class="dash-card"><span class="dash-title">Users</span><span class="dash-value" style="color:cyan">${db.users.length}</span></div>
             <div class="dash-card"><span class="dash-title">Orders</span><span class="dash-value" style="color:lime">${db.orders.length}</span></div>
-            <div class="dash-card"><span class="dash-title">Requests</span><span class="dash-value" style="color:orange">${db.balance_requests.filter(r=>r.status==='pending').length}</span></div>
+            <div class="dash-card"><span class="dash-title">Requests</span><span class="dash-value" style="color:orange">${db.balance_requests.filter(r => r.status === 'pending').length}</span></div>
         </div>
         <button onclick="renderUserHomeFromAdmin()" style="margin-top:20px; padding:10px; background:#6366f1; border:none; color:white; cursor:pointer;">Mağazaya Qayıt</button>
     `;
@@ -690,45 +710,79 @@ function renderAdminProducts() {
     let html = `<h2 style="color:white;">Məhsullar</h2><table><thead><tr><th>Ad</th><th>Qiymət</th></tr></thead><tbody>`;
     db.products.forEach(p => { html += `<tr><td>${p.name}</td><td>${p.price} ₼</td></tr>`; });
     document.getElementById('admin-view').innerHTML = html + `</tbody></table>`;
-}function handleSearch(e) {
-    const term = e.target.value.toLowerCase();
-    if(term.length < 2) { if(term.length===0) renderUserHome(); return; }
+} function handleSearch(e) {
+    const term = e.target.value.toLowerCase().trim();
+    
+    // Axtarış qutusu boşdursa, ana səhifəni qaytar
+    if(term.length === 0) { renderUserHome(); return; }
+    // 2 hərfdən azdırsa heç nə etmə
+    if(term.length < 2) return; 
 
-    const filtered = db.products.filter(p => p.name.toLowerCase().includes(term));
     const v = document.getElementById('user-view');
+    let html = `<div class="container"><h2 class="section-title">Axtarış: <span>"${e.target.value}"</span></h2><div class="grid-cols">`;
     
-    let html = `<div class="container"><h2 class="section-title">Axtarış: <span>"${term}"</span></h2><div class="grid-cols">`;
+    let foundAny = false;
+
+    // 1. KATEQORİYALARI AXTAR (İstədiyin kimi, kateqoriya kartı da görünsün)
+    const matchingCats = db.categories.filter(c => c.name.toLowerCase().includes(term));
     
-    if(filtered.length === 0) html += `<p style="color:#94a3b8;">Tapılmadı.</p>`;
-    else {
-        filtered.forEach(p => {
-            const cat = DEFAULT_CATS.find(c => c.id === p.catId);
-            html += `
-            <div class="pro-card" onclick="openDetail(${p.id})">
-                <div class="card-top">
-                    <div class="logo-box">
-                        <img src="${cat ? cat.img : ''}" onerror="this.style.display='none'">
-                    </div>
-                </div>
-                <div class="card-info">
-                    <h3>${p.name}</h3>
-                </div>
-                <div class="card-price">
-                    <div class="price">${p.price} ₼</div>
-                    <button class="buy-btn" onclick="event.stopPropagation(); addToCart(${p.id})">
-                        <i class="fas fa-cart-plus"></i> Səbətə At
-                    </button>
-                </div>
-            </div>`;
-        });
+    matchingCats.forEach(c => {
+        foundAny = true;
+        html += `
+        <div class="pro-card" onclick="renderCategoryProducts('${c.id}')" style="cursor:pointer; border: 1px solid #6366f1;">
+            <div class="card-top">
+                <div class="logo-box"><img src="${c.img}"></div>
+            </div>
+            <div class="card-info">
+                <h3 style="color:#a5b4fc;">KATEQORİYA</h3>
+                <h3 style="margin-top:5px;">${c.name}</h3>
+            </div>
+            <div class="card-price">
+                <button class="buy-btn" style="width:100%; background:rgba(99, 102, 241, 0.2); color:#a5b4fc;">Paketlərə Bax</button>
+            </div>
+        </div>`;
+    });
+
+    // 2. MƏHSULLARI AXTAR (Həm adına, həm də aid olduğu kateqoriyanın adına görə)
+    const matchingProds = db.products.filter(p => {
+        // Məhsulun kateqoriyasını tapırıq
+        const cat = db.categories.find(c => c.id === p.catId);
+        const catName = cat ? cat.name.toLowerCase() : '';
+        
+        // ŞƏRT: Ya məhsulun adında, ya açıqlamasında, ya da KATEQORİYA adında axtarılan söz olsun
+        return p.name.toLowerCase().includes(term) || 
+               (p.desc && p.desc.toLowerCase().includes(term)) || 
+               catName.includes(term);
+    });
+
+    matchingProds.forEach(p => {
+        foundAny = true;
+        const cat = db.categories.find(c => c.id === p.catId);
+        html += `
+        <div class="pro-card" onclick="openDetail(${p.id})">
+            <div class="card-top">
+                <div class="logo-box"><img src="${cat ? cat.img : ''}" onerror="this.style.display='none'"></div>
+            </div>
+            <div class="card-info"><h3>${p.name}</h3></div>
+            <div class="card-price">
+                <div class="price">${p.price} ₼</div>
+                <button class="buy-btn" onclick="event.stopPropagation(); addToCart(${p.id})">
+                    <i class="fas fa-cart-plus"></i> Səbətə At
+                </button>
+            </div>
+        </div>`;
+    });
+
+    if(!foundAny) {
+        html += `<p style="color:#94a3b8; grid-column: 1/-1; text-align:center;">Heç nə tapılmadı.</p>`;
     }
+
     v.innerHTML = html + `</div></div>`;
 }
-
 function renderAdminBalance() {
     const reqs = db.balance_requests.filter(r => r.status === 'pending');
     let html = `<h2 style="color:white;">Balans Sorğuları</h2><table><thead><tr><th>User</th><th>Məbləğ</th><th>Link</th><th>Hərəkət</th></tr></thead><tbody>`;
-    if(reqs.length === 0) html += `<tr><td colspan="4" style="text-align:center;">Yoxdur</td></tr>`;
+    if (reqs.length === 0) html += `<tr><td colspan="4" style="text-align:center;">Yoxdur</td></tr>`;
     reqs.forEach(r => {
         html += `<tr>
             <td>${r.username}</td><td>${r.amount} ₼</td>
@@ -740,13 +794,13 @@ function renderAdminBalance() {
 }
 
 async function approveBal(id) {
-    if(!confirm('Təsdiqləyirsən?')) return;
+    if (!confirm('Təsdiqləyirsən?')) return;
     await sendRequest({ action: 'approveBalance', reqId: id, role: 'admin' });
     fetchAdminData();
 }
 
 async function rejectBal(id) {
-    if(!confirm('Ləğv edirsən?')) return;
+    if (!confirm('Ləğv edirsən?')) return;
     await sendRequest({ action: 'rejectBalance', reqId: id, role: 'admin' });
     fetchAdminData();
 }
@@ -783,15 +837,15 @@ function renderAdminUsers() {
 // UTILS
 // ==========================================
 function createModalHTML() {
-    if(!document.getElementById('modal-overlay')) {
-        const d = document.createElement('div'); d.id='modal-overlay'; d.className='modal-overlay';
+    if (!document.getElementById('modal-overlay')) {
+        const d = document.createElement('div'); d.id = 'modal-overlay'; d.className = 'modal-overlay';
         d.innerHTML = `<div class="modal-box"><span class="close-modal" onclick="closeModal()">&times;</span><div id="modal-dynamic-content"></div></div>`;
         document.body.appendChild(d);
-        d.onclick = (e) => { if(e.target === d) closeModal(); }
+        d.onclick = (e) => { if (e.target === d) closeModal(); }
     }
 }
 function closeModal(id) {
-    if(id) document.getElementById(id).style.display = 'none';
+    if (id) document.getElementById(id).style.display = 'none';
     else document.querySelectorAll('.modal-overlay').forEach(o => o.style.display = 'none');
 }
 
@@ -833,5 +887,4 @@ window.openDelModal = openDelModal;
 window.submitDelivery = submitDelivery;
 window.renderAdminUsers = renderAdminUsers;
 window.renderUserHomeFromAdmin = renderUserHomeFromAdmin;
-
 window.openInfoModal = openInfoModal;
