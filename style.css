@@ -1757,3 +1757,27 @@ button:disabled {
     visibility: visible !important;
     pointer-events: auto !important;
 }
+
+/* Axtarış Qutusu - Mobil Aktiv Görünüş */
+.search-box.mobile-active {
+    display: flex !important;
+    position: absolute;
+    top: 75px; /* Navbarın altı */
+    left: 5%;
+    width: 90%;
+    background: #1e293b;
+    padding: 10px;
+    border-radius: 12px;
+    z-index: 9999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #6366f1;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* Mobil Menyu İkonları */
+.nav-item {
+    cursor: pointer;
+    z-index: 10001; /* Hər şeyin üstündə olsun */
+}
