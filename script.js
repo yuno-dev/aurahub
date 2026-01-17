@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sendRequest({ action: "getPublicData" }).catch(() => console.log("Oflayn rejim (Məhsullar yenilənmədi)"));
 
     // B) Əgər istifadəçi giriş edibsə, Balansını Yenilə (Login Check)
-    if (currentUser && currentUsqer.username && currentUser.password) {
+    if (currentUser && currentUser.username && currentUser.password) {
         console.log("Hesab arxa planda yoxlanılır...");
         
         sendRequest({
