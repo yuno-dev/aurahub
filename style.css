@@ -1,0 +1,1468 @@
+:root {
+    /* --- ULTRA PREMIUM PALET (NEON DARK) --- */
+    --bg: #020617;
+    /* Simsiyah Arxa Plan (Midnight) */
+    --surface: #0f172a;
+    /* Kart Arxa Planı */
+    --surface-light: #1e293b;
+    --border: #1e293b;
+    /* Çərçivə rəngi */
+
+    --primary: #6366f1;
+    /* İndigo - Ana Rəng */
+    --primary-glow: rgba(99, 102, 241, 0.5);
+
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+
+    --success: #10b981;
+    /* Yaşıl */
+    --danger: #ef4444;
+    /* Qırmızı */
+
+    /* Neon Kölgələr */
+    --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+/* --- GENEL SIFIRLAMA --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* --- KRİTİK LOGO DÜZƏLİŞİ --- */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Bütün loqoları məcburən kiçilt */
+.nav-brand img,
+.sidebar-brand img,
+.footer-logo,
+.logo-box img {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: contain;
+    border-radius: 12px;
+    background-color: white;
+    padding: 2px;
+}
+
+/* Login ekranındakı loqo */
+.login-wrapper .brand-logo {
+    width: 80px !important;
+    height: 80px !important;
+    margin: 0 auto 20px auto;
+    object-fit: contain;
+    background: white;
+    border-radius: 15px;
+    padding: 5px;
+}
+
+/* Admin Profil Şəkli */
+.admin-user img {
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    background: white;
+    padding: 2px;
+}
+
+/* Cədvəl daxilindəki şəkillər */
+table img {
+    width: 40px !important;
+    height: 40px !important;
+    object-fit: contain;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+/* YARDIMÇI */
+.hidden {
+    display: none !important;
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* --- NAVBAR --- */
+.navbar {
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    background: rgba(2, 6, 23, 0.9);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+}
+
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+/* Axtarış */
+.search-box {
+    position: relative;
+    width: 400px;
+}
+
+.search-box input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 12px 12px 12px 45px;
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+.search-box input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+/* Balans & Səbət */
+.nav-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.btn-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    position: relative;
+    cursor: pointer;
+}
+
+.btn-icon:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--danger);
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    border: 2px solid var(--bg);
+}
+
+.balance-display {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    cursor: pointer;
+}
+
+/* --- HERO SLIDER --- */
+.hero-section {
+    max-width: 1280px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.slider-container {
+    min-height: 250px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide-text h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    line-height: 1.1;
+}
+
+.slide-text p {
+    font-size: 1.2rem;
+    color: #a5b4fc;
+}
+
+/* --- KARTLAR (PREMIUM) --- */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title span {
+    color: var(--primary);
+}
+
+.grid-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.pro-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.pro-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-glow) inset;
+}
+
+.pro-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent 50%);
+    opacity: 0;
+    transition: 0.4s;
+}
+
+.pro-card:hover::before {
+    opacity: 1;
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 2;
+}
+
+/* Logo Qutusu */
+.logo-box {
+    width: 60px;
+    height: 60px;
+    /* Sabit ölçü */
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.4s;
+    overflow: hidden;
+    /* Taşarsa gizlə */
+}
+
+.pro-card:hover .logo-box {
+    transform: rotate(-10deg) scale(1.1);
+}
+
+/* Logo Box içindəki şəkil qaydası (Yuxarıdakı ümumi qaydanı dəstəkləyir) */
+.logo-box img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    padding: 0;
+    background: transparent;
+}
+
+.status-badge {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.card-info h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.card-info p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.card-price {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+}
+
+.price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: white;
+}
+
+.buy-btn {
+    padding: 10px 20px;
+    background: var(--surface-light);
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    transition: 0.3s;
+}
+
+.pro-card:hover .buy-btn {
+    background: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 5px 15px var(--primary-glow);
+}
+
+/* --- MODAL (PƏNCƏRƏ) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-box {
+    background: #0f172a;
+    width: 800px;
+    max-width: 95%;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.8);
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-modal:hover {
+    color: var(--danger);
+    transform: rotate(90deg);
+}
+
+.modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 40px;
+}
+
+/* --- MODAL ŞƏKİL DÜZƏLİŞİ (TAM OTURMA) --- */
+.modal-img-area {
+    /* Çərçivənin özü */
+    width: 330px;
+    /* Genişlik tam olsun */
+    height: 350px;
+    /* Hündürlük sabit qalsın */
+    background: white;
+    /* Arxa plan ağ olsun */
+    border-radius: 20px;
+    /* Künclər yuvarlaq */
+    overflow: hidden;
+    /* Şəkil kənara daşmasın */
+    padding: 0 !important;
+    /* İÇƏRİDƏKİ BOŞLUQLARI SİLİRİK */
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-img-area img {
+    /* Şəklin özü */
+    width: 100% !important;
+    /* Eni tam doldur */
+    height: 100% !important;
+    /* Uzunluğu tam doldur */
+    object-fit: cover !important;
+    /* Boşluq buraxmadan doldur */
+    display: block;
+}
+
+/* --- MODAL SAĞ TƏRƏF (DÜYMƏ AŞAĞIDA) --- */
+.modal-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Məzmunu və düyməni uzaqlaşdır */
+    height: 100%;
+    min-height: 350px;
+    /* Sol tərəflə eyni hündürlük */
+}
+
+.modal-action {
+    margin-top: auto;
+    /* Düyməni ən dibə itələyir */
+    width: 100%;
+    padding-top: 20px;
+}
+
+.feature-list {
+    list-style: none;
+    margin: 20px 0;
+}
+
+.feature-list li {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: var(--text-muted);
+}
+
+.feature-list li i {
+    color: var(--primary);
+    width: 20px;
+    text-align: center;
+}
+
+.feature-list li b {
+    color: white;
+    margin-right: 5px;
+}
+
+.full-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 10px 30px var(--primary-glow);
+}
+
+.full-btn:hover {
+    transform: scale(1.02);
+}
+
+/* --- ADMIN PANEL (FIXED SIDEBAR) --- */
+#admin-section {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg);
+}
+
+.sidebar {
+    width: 280px;
+    background: #0f172a;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    z-index: 100;
+}
+
+.sidebar-brand {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 25px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: white;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    /* Logo taşarsa gizlə */
+}
+
+.menu {
+    list-style: none;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.menu li {
+    padding: 14px 20px;
+    border-radius: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.menu li:hover,
+.menu li.active {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+}
+
+.admin-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.admin-topbar {
+    height: 80px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    background: rgba(15, 23, 42, 0.95);
+    flex-shrink: 0;
+}
+
+.view-content {
+    padding: 40px;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.dash-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dash-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+}
+
+/* TABLES */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    margin-top: 10px;
+}
+
+th {
+    text-align: left;
+    padding: 15px 20px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+td {
+    background: var(--surface);
+    padding: 15px 20px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    color: white;
+}
+
+tr td:first-child {
+    border-left: 1px solid var(--border);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+tr td:last-child {
+    border-right: 1px solid var(--border);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* --- MODERN FOOTER STİLLƏRİ (V2) --- */
+.modern-footer {
+    background: #020617;
+    /* Çox tünd arxa plan */
+    margin-top: 80px;
+    position: relative;
+    border-top: 1px solid #1e293b;
+}
+
+/* Neon Xətt */
+.footer-line {
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--primary), #a855f7, var(--primary));
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+.footer-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 60px 20px 20px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    gap: 40px;
+    padding-bottom: 50px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Brend Hissəsi */
+.footer-logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.footer-logo-wrap img {
+    width: 45px !important;
+    height: 45px !important;
+    background: white;
+    padding: 3px;
+    border-radius: 10px;
+}
+
+.footer-logo-wrap span {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -1px;
+}
+
+.footer-brand-col p {
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+/* Sosial İkonlar */
+.social-row {
+    display: flex;
+    gap: 10px;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: 0.3s;
+    border: 1px solid transparent;
+}
+
+.social-icon:hover {
+    background: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+}
+
+/* Linklər */
+.footer-links-col h4,
+.footer-contact-col h4 {
+    color: white;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+.footer-links-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links-col li {
+    color: #94a3b8;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-links-col li i {
+    font-size: 0.7rem;
+    opacity: 0;
+    transition: 0.3s;
+    color: var(--primary);
+}
+
+.footer-links-col li:hover {
+    color: white;
+    padding-left: 5px;
+}
+
+.footer-links-col li:hover i {
+    opacity: 1;
+}
+
+/* Əlaqə */
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    color: #94a3b8;
+}
+
+.contact-item i {
+    color: var(--primary);
+    width: 20px;
+    text-align: center;
+}
+
+/* Alt hissə */
+.footer-bottom {
+    padding-top: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.payment-icons {
+    display: flex;
+    gap: 15px;
+    font-size: 1.5rem;
+    color: #475569;
+}
+
+/* MOBİL (RESPONSIVE) */
+@media(max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+
+    .footer-logo-wrap,
+    .social-row,
+    .contact-item {
+        justify-content: center;
+    }
+
+    .footer-links-col li {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* LOGIN SCREEN */
+#login-section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-wrapper {
+    width: 400px;
+    padding: 40px;
+    background: var(--surface);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    text-align: center;
+}
+
+/* INPUTS */
+input,
+select,
+textarea {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border);
+    color: white;
+    padding: 14px;
+    border-radius: 12px;
+    outline: none;
+    margin-bottom: 20px;
+}
+
+/* BUTTONS */
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 5px 15px var(--primary-glow);
+    transform: translateY(-2px);
+}
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .nav-actions {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .footer-row,
+    .modal-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+    }
+
+    .menu {
+        display: flex;
+        overflow-x: auto;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .menu li {
+        white-space: nowrap;
+    }
+
+    #admin-section {
+        flex-direction: column;
+        overflow: visible;
+    }
+}
+
+/* --- YENİ MÜASİR HERO SLIDER --- */
+.hero-section {
+    max-width: 1280px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.hero-wrapper {
+    position: relative;
+    height: 350px;
+    /* Hündürlük artırıldı */
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    padding: 0 80px;
+    /* Yazı üçün boşluq */
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    z-index: 1;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    z-index: 2;
+}
+
+/* Qara kölgə (yazı oxunsun deyə) */
+.hero-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(2, 6, 23, 0.9) 0%, rgba(2, 6, 23, 0.4) 100%);
+    z-index: -1;
+}
+
+.hero-content {
+    max-width: 600px;
+    z-index: 3;
+    animation: slideUp 0.8s ease forwards;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.hero-desc {
+    font-size: 1.2rem;
+    color: #cbd5e1;
+    margin-bottom: 30px;
+}
+
+.hero-btn {
+    padding: 15px 35px;
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+    border-radius: 15px;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hero-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.5);
+}
+
+/* Animasiya */
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Mobil üçün */
+@media(max-width: 768px) {
+    .hero-wrapper {
+        height: 400px;
+    }
+
+    .hero-slide {
+        padding: 30px;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-slide::before {
+        background: rgba(2, 6, 23, 0.7);
+    }
+}
+/* ... (Əvvəlki CSS kodları qalır) ... */
+
+/* LOGIN & REGISTER SWITCH STİLLƏRİ */
+/* =========================================
+   1. NAVBAR DÜZƏLİŞİ (İkonları yan-yana düz)
+   ========================================= */
+#user-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* İkonlar arası məsafə */
+}
+
+/* Qonaq menyusu da səliqəli olsun */
+#guest-menu {
+    display: flex;
+    align-items: center;
+}
+
+/* =========================================
+   2. GİRİŞ EKRANI (Tam Ekran Overlay)
+   ========================================= */
+/* auth-section artıq sadəcə bir div deyil, bütün ekranı tutan pərdədir */
+#auth-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.95); /* Tünd fon */
+    backdrop-filter: blur(10px); /* Arxanı bulandır */
+    z-index: 2000; /* Hər şeyin üstündə olsun */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* =========================================
+   MOBİL BALANS DİZAYNI
+   ========================================= */
+.mobile-balance {
+    display: none; /* Kompüterdə gizlət */
+    background: rgba(16, 185, 129, 0.15); /* Açıq yaşıl fon */
+    color: #10b981; /* Yaşıl yazı */
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-left: 10px;
+    cursor: pointer;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* YALNIZ MOBİLDƏ GÖSTƏR */
+@media (max-width: 768px) {
+    .mobile-balance {
+        display: block; /* Telefonda göstər */
+    }
+    
+    /* Logonu biraz kiçilt ki, balans yerləşsin */
+    .nav-brand {
+        font-size: 1.1rem; 
+        
+    }
+    .nav-brand img {
+
+        width: 30px;
+        height: 30px;
+    }
+}
+/* Gizlətmək üçün class (CSS-də varsa toxunma, yoxdursa əlavə et) */
+
+
+
+.auth-wrapper { 
+    width: 420px; padding: 40px; background: var(--surface); 
+    border: 1px solid var(--border); border-radius: 24px; text-align: center; 
+    position: relative; z-index: 10;
+}
+
+.auth-switch {
+    margin-top: 20px; color: var(--text-muted); font-size: 0.9rem;
+}
+.auth-switch span {
+    color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: underline;
+}
+
+/* LOADING OVERLAY (YÜKLƏNMƏ) */
+#loading-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(2, 6, 23, 0.9);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 20;
+    transition: opacity 0.5s;
+}
+.spinner {
+    width: 50px; height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.1);
+    border-top: 5px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Button Disabled Style */
+button:disabled {
+    opacity: 0.6; cursor: not-allowed;
+}/* =========================================
+   MOBİL CİHAZLAR ÜÇÜN XÜSUSİ DİZAYN
+   ========================================= */
+
+/* Varsayılan olaraq mobil menyunu gizlət (Kompüterdə görünməsin) */
+.mobile-nav {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    /* 1. ÜST MENU (NAVBAR) DƏYİŞİKLİKLƏRİ */
+    .navbar {
+        padding: 10px 15px;
+        background: rgba(15, 23, 42, 0.95);
+    }
+    
+    .nav-brand {
+        font-size: 1.2rem;
+    }
+
+    /* Üstdəki düymələri gizlət (Çünki aşağı menyu var) */
+    .navbar .nav-actions {
+        display: none;
+    }
+
+    .search-box {
+        width: 40px; /* Sadəcə ikon qalsın, basanda açılsın istəsəniz JS lazımdır, hələlik kiçik qalsın */
+        display: none; /* Yer tutmasın deyə mobildə axtarışı gizlətdik və ya aşağı sala bilərik */
+    }
+
+    /* 2. MOBİL AŞAĞI MENYU (BOTTOM NAV) */
+    .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background: #0f172a;
+        border-top: 1px solid #1e293b;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 1000;
+        padding-bottom: 5px; /* iPhone safe area üçün */
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #64748b;
+        font-size: 0.8rem;
+        cursor: pointer;
+        position: relative;
+        width: 20%;
+    }
+
+    .nav-item i {
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+        transition: 0.3s;
+    }
+
+    .nav-item.active i, .nav-item:active i {
+        color: #6366f1;
+        transform: translateY(-3px);
+    }
+
+    /* Ortadakı + Düyməsi (Balans üçün) */
+    .center-btn {
+        transform: translateY(-25px);
+    }
+
+    .plus-btn {
+        width: 55px;
+        height: 55px;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        box-shadow: 0 5px 15px rgba(99, 102, 241, 0.5);
+        border: 4px solid #0f172a;
+    }
+
+    .mobile-badge {
+        position: absolute;
+        top: -5px;
+        right: 15px;
+        font-size: 0.7rem;
+        padding: 2px 5px;
+    }
+
+    /* 3. KONTEYNER VƏ KARTLAR */
+    .container {
+        padding: 15px;
+        padding-bottom: 90px; /* Aşağı menyunun altında qalmasın */
+    }
+
+    .grid-cols {
+        grid-template-columns: 1fr 1fr; /* 2 Sütunlu görünüş */
+        gap: 15px;
+    }
+
+    .pro-card {
+        padding: 15px;
+    }
+
+    .card-top img {
+        width: 60px; /* Loqoları biraz kiçilt */
+    }
+
+    .card-info h3 {
+        font-size: 0.9rem;
+    }
+
+    .card-info p {
+        font-size: 0.7rem;
+    }
+
+    .price {
+        font-size: 1rem;
+    }
+
+    .buy-btn {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+
+    /* 4. MODALLAR (Telefonda aşağıdan çıxsın) */
+    .modal-box {
+        width: 100% !important;
+        position: absolute;
+        bottom: 0;
+        border-radius: 20px 20px 0 0;
+        margin: 0;
+        animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+
+    .modal-grid {
+        grid-template-columns: 1fr; /* Modalı tək sütun et */
+    }
+
+    .modal-img-area {
+        height: 150px;
+        margin-bottom: 15px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-desc {
+        font-size: 1rem;
+    }
+    
+    /* Balans ekranını səliqəyə sal */
+    #user-balance-display {
+        font-size: 0.9rem;
+        background: rgba(255,255,255,0.1);
+        padding: 5px 10px;
+        border-radius: 8px;
+    }
+}
+/* =========================================
+   LOGIN & REGISTER EKRANI DÜZƏLİŞLƏRİ
+   ========================================= */
+
+/* 1. Loqonu Kiçilt və Gözəlləşdir */
+.brand-logo {
+    width: 100px;          /* Sabit genişlik */
+    height: 100px;         /* Sabit hündürlük */
+    object-fit: cover;     /* Şəkli əzmədən çərçivəyə sığdır */
+    border-radius: 50%;    /* Dairəvi forma (İstəməsən bu sətri sil) */
+    margin: 0 auto 20px auto; /* Tam ortala və aşağıdan boşluq burax */
+    display: block;        /* Blok element et ki, ortalansın */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4); /* Qəşəng kölgə əlavə et */
+    border: 3px solid rgba(255,255,255,0.1); /* İncə çərçivə */
+}
+
+/* 2. Login Qutusunun İçini Səliqəyə Sal */
+.auth-wrapper {
+    text-align: center;    /* Bütün yazıları və düymələri ortala */
+    max-width: 400px;      /* Çox geniş olmasın */
+    width: 90%;            /* Mobildə kənarlardan daşmasın */
+    padding: 40px 30px;    /* İçəri boşluq ver */
+}
+
+/* 3. Giriş Başlıqları */
+.auth-wrapper h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* 4. İnput Sahələri (Daha müasir görünüş) */
+.auth-wrapper input {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 12px 15px;
+    color: white;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+.auth-wrapper input:focus {
+    border-color: #6366f1;
+    background: rgba(15, 23, 42, 0.9);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+}
+
+/* 5. Etiketləri (Label) sola çək */
+.auth-wrapper label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+/* TOAST NOTIFICATIONS */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast {
+    background: rgba(30, 41, 59, 0.95);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border-left: 5px solid #6366f1;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    min-width: 300px;
+    animation: slideIn 0.3s ease;
+}
+
+.toast.error { border-left-color: #ef4444; }
+.toast.success { border-left-color: #10b981; }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateX(100%); }
+}
