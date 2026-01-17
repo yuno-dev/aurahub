@@ -1717,3 +1717,48 @@ button:disabled {
         display: none !important;
     }
 }
+
+/* =========================================
+   MOBİL MODAL & AXTARIŞ FIX (FINAL)
+   ========================================= */
+
+/* 1. MODALLAR (Kəsilmə problemini həll edir) */
+.modal-overlay {
+    z-index: 10001 !important; /* Alt menyudan daha üstdə olsun */
+    align-items: flex-start; /* Yuxarıdan başlasın, ortada sıxılmasın */
+    padding-top: 80px; /* Yuxarıdan boşluq */
+    overflow-y: auto; /* Ekran balaca olsa sürüşdürülə bilsin */
+}
+
+.modal-box {
+    max-height: 80vh; /* Ekranın 80%-ni tutsun */
+    overflow-y: auto; /* İçindəkilər çoxdursa scroll olsun */
+    margin-bottom: 100px; /* Aşağıda boşluq qalsın */
+    position: relative;
+    z-index: 10002;
+}
+
+/* 2. AXTARIŞ QUTUSU (Mobildə açılması üçün) */
+.search-box.mobile-active {
+    display: flex !important; /* Məcburi göstər */
+    position: fixed;
+    top: 65px; /* Navbarın düz altı */
+    left: 0;
+    width: 100%;
+    background: #0f172a;
+    padding: 15px;
+    z-index: 9998; /* Alt menyunun altında, amma məzmunun üstündə */
+    border-bottom: 1px solid #334155;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Alt Menyunun Z-Indexi (Modaldan aşağıda olmalıdır) */
+.mobile-bottom-nav {
+    z-index: 9999; 
+}
