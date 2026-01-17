@@ -455,7 +455,7 @@ function startCountdown(btn, seconds) {
 // ==========================================
 function renderUserHome() {
     const v = document.getElementById('user-view');
-    let html = `<div class="hero-section"><div class="hero-wrapper"><div class="hero-slide active" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);"><div class="hero-content"><div class="hero-title">AURAHUB</div><div class="hero-desc">Premium Mağaza</div></div></div></div></div>`;
+    let html = `<div class="hero-section"><div class="hero-wrapper"><div class="hero-slide active" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);"><div class="hero-content"><div class="hero-title">AURAHUB</div><div class="hero-desc">Sənin zövqünə və cibinə uyğun:)</div></div></div></div></div>`;
 
     html += `<div class="container"><h2 class="section-title">Kəşf Et</h2><div class="grid-cols">`;
     DEFAULT_CATS.forEach(c => {
