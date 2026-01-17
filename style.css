@@ -1740,3 +1740,38 @@ button:disabled {
     visibility: visible !important;
     pointer-events: auto !important;
 }
+/* =========================================
+   FIX: ALT MENYU İLƏ ÜST-ÜSTƏ DÜŞMƏ PROBLEMİ (FINAL)
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    /* 1. MƏHSUL KARTLARI DÜZƏLİŞİ */
+    /* Səhifənin ən aşağısına elə bir boşluq qoyuruq ki, sonuncu məhsul menyunun altında qalmasın */
+    body {
+        padding-bottom: 120px !important; 
+        min-height: 100vh;
+    }
+
+    .container {
+        padding-bottom: 100px !important;
+    }
+
+    /* 2. MODALLAR (Profil, Səbət, Sifariş) DÜZƏLİŞİ */
+    /* Pəncərələr açilanda Alt Menyunun üstünə çıxmasın və ya altında qalmasın */
+    .modal-box {
+        margin-bottom: 90px !important; /* Modalı menyudan 90px yuxarı itələ */
+        max-height: calc(100vh - 150px) !important; /* Ekran boyundan balaca olsun ki, sürüşdürülə bilsin */
+        overflow-y: auto !important; /* İçi dolanda rahat sürüşsün */
+    }
+
+    .modal-overlay {
+        align-items: flex-end !important; /* Modalı ekranın aşağısına çək */
+        padding-bottom: 100px !important; /* Amma menyuya dəyməsin */
+    }
+
+    /* Əlavə Sığorta: Footer (Əgər varsa) */
+    .modern-footer {
+        margin-bottom: 80px !important;
+    }
+}
