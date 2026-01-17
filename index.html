@@ -55,55 +55,38 @@
 
     <div id="user-section">
 
-       <nav class="navbar">
+        <nav class="navbar">
+        <div class="nav-container-mobile">
+            <a href="#" onclick="renderUserHome()" class="nav-brand">
+                <img src="img/logo.jpg" alt="Aurahub" onerror="this.src='https://via.placeholder.com/40'"> 
+                <span>Aurahub</span>
+            </a>
 
-            <div class="nav-left">
-                <a href="#" onclick="renderUserHome()" class="nav-brand">
-                    <img src="logo.jpg"> Aurahub
-                </a>
-
-                <div id="mobile-balance-display" onclick="openBalanceModal()" class="mobile-balance hidden-on-desktop">
-                    0.00 ₼
-                </div>
+            <div id="mobile-balance-display" onclick="openBalanceModal()" class="mobile-balance-pill">
+                0.00 ₼ <i class="fas fa-plus-circle" style="font-size:0.8rem; margin-left:5px;"></i>
             </div>
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Axtar..." onkeyup="handleSearch(event)">
+        </div>
+        
+        <div class="search-box desktop-only">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Axtar..." onkeyup="handleSearch(event)">
+        </div>
+        
+        <div class="nav-actions desktop-only">
+            <div id="guest-menu">
+                <button class="btn-primary" onclick="openAuth()"><i class="fas fa-sign-in-alt"></i> Giriş</button>
             </div>
-
-            <div class="nav-actions">
-                <div id="guest-menu">
-                    <button class="btn-primary" onclick="openAuth()" style="padding: 8px 20px; font-size: 0.9rem;">
-                        <i class="fas fa-sign-in-alt"></i> Giriş Et
-                    </button>
+            <div id="user-menu" class="hidden" style="display:flex; align-items:center; gap:15px;">
+                <div class="balance-display" id="user-balance-display" onclick="openBalanceModal()">0.00 ₼</div>
+                <div class="btn-icon" onclick="openUserOrders()"><i class="fas fa-box"></i></div>
+                <div class="btn-icon" onclick="openProfileModal()"><i class="fas fa-user-cog"></i></div>
+                <div class="btn-icon" onclick="openCart()">
+                    <i class="fas fa-shopping-bag"></i><span class="badge">0</span>
                 </div>
-
-                <div id="user-menu" class="hidden" style="display:flex; align-items:center; gap:15px;">
-                    <div class="balance-display" id="user-balance-display" onclick="openBalanceModal()"
-                        style="cursor:pointer;" title="Balans Artır">
-                        0.00 ₼
-                    </div>
-
-                    <div class="btn-icon" onclick="openUserOrders()" title="Sifarişlərim">
-                        <i class="fas fa-box"></i>
-                    </div>
-
-                    <div class="btn-icon" onclick="openProfileModal()" title="Profil">
-                        <i class="fas fa-user-cog"></i>
-                    </div>
-
-                    <div class="btn-icon" onclick="openCart()" title="Səbət">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span class="badge">0</span>
-                    </div>
-
-                    <div class="btn-icon" onclick="logout()" style="color:red;" title="Çıxış">
-                        <i class="fas fa-power-off"></i>
-                    </div>
-                </div>
+                <div class="btn-icon" onclick="logout()" style="color:red;"><i class="fas fa-power-off"></i></div>
             </div>
-        </nav>
-
+        </div>
+    </nav>
         <div id="user-view" style="min-height: 60vh;"></div>
 
       <footer class="modern-footer">
@@ -178,19 +161,6 @@
             </div>
         </footer>
 
-    </div>
-
-    <div class="mobile-nav">
-        <div class="nav-item" onclick="renderUserHome()"><i class="fas fa-home"></i><span>Ev</span></div>
-        <div class="nav-item" onclick="handleMobileAction('orders')"><i class="fas fa-box"></i><span>Sifariş</span>
-        </div>
-        <div class="nav-item center-btn" onclick="handleMobileAction('balance')">
-            <div class="plus-btn"><i class="fas fa-plus"></i></div>
-        </div>
-        <div class="nav-item" onclick="handleMobileAction('profile')"><i class="fas fa-user"></i><span>Profil</span>
-        </div>
-        <div class="nav-item" onclick="openCart()"><i class="fas fa-shopping-cart"></i><span
-                class="mobile-badge badge">0</span><span>Səbət</span></div>
     </div>
 
     <div id="admin-section" class="hidden">
