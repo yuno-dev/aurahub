@@ -4,54 +4,88 @@
 
 // 🔴 BURAYA ÖZ DEPLOY LİNKİNİZİ YAPIŞDIRIN! (Dırnaqları silməyin)
 const API_URL = "https://script.google.com/macros/s/AKfycbyu5hOghZRLt9_8mKHBh1PvtXKPR-3dQL_xqCqBjGIjPxcfYf8NM8UMOzyiPlTPC9XM7Q/exec";
+// ==========================================
+// 1. AYARLAR VƏ MƏLUMAT BAZASI
+// ==========================================
 
-// YENİ KATEQORİYALAR (Sənin Logolarınla)
+// 🔴 DİQQƏT: BURAYA ÖZ GOOGLE APPS SCRIPT LİNKİNİZİ YAPIŞDIRIN!
+
+// KATEQORİYALAR
 const DEFAULT_CATS = [
-    { id: 'efootball', name: 'eFootball', img: 'img/efootball.png', sub: 'eFootball Coin' },
-    { id: 'gemini', name: 'Gemini AI', img: 'img/gemini.png', sub: 'Premium AI' },
-    { id: 'pubg', name: 'PUBG Mobile', img: 'img/pubg.png', sub: 'UC Paketləri' },
-    { id: 'minecraft', name: 'Minecraft', img: 'img/minecraft.png', sub: 'Java & Bedrock' },
     { id: 'netflix', name: 'Netflix', img: 'img/netflix.png', sub: 'Film & Serial' },
-    { id: 'spotify', name: 'Spotify', img: 'img/spotify.png', sub: 'Musiqi Keyfi' },
-    { id: 'steam', name: 'Steam', img: 'img/steam.png', sub: 'Cüzdan Kodu' },
-    { id: 'valorant', name: 'Valorant', img: 'img/valorant.png', sub: 'VP Paketləri' },
-    { id: 'youtube', name: 'YouTube', img: 'img/youtube.png', sub: 'Premium Üzvlük' }
+    { id: 'spotify', name: 'Spotify', img: 'img/spotify.png', sub: 'Musiqi & Podkast' },
+    { id: 'youtube', name: 'YouTube', img: 'img/youtube.png', sub: 'Premium Video' },
+    { id: 'gemini', name: 'Gemini AI', img: 'img/gemini.png', sub: 'Süni İntellekt' },
+    { id: 'minecraft', name: 'Minecraft', img: 'img/minecraft.png', sub: 'Java & Bedrock' },
+    { id: 'steam', name: 'Steam', img: 'img/steam.png', sub: 'Oyun Paketleri' },
+    { id: 'valorant', name: 'Valorant', img: 'img/valorant.png', sub: 'VP (TR & EU)' },
+    { id: 'pubg', name: 'PUBG Mobile', img: 'img/pubg.png', sub: 'Global UC' },
+    { id: 'efootball', name: 'eFootball', img: 'img/efootball.png', sub: 'Mobile Coins' }
 ];
 
-// YENİ MƏHSULLAR (Hər Kateqoriyada 1 Ədəd)
+// MƏHSULLAR (STRATEJİ QİYMƏTLƏRLƏ - .99)
+// MƏHSULLAR (ALT-ALTA VƏ ŞIX DİZAYN)
 const DEFAULT_PRODS = [
-    // eFootball
-    { id: 101, catId: 'efootball', name: '1050 eFootball Coin', price: 12.5, desc: 'Mobil və PC uyğun • Sürətli Yükləmə' },
+    // --- NETFLIX ---
+    { id: 101, catId: 'netflix', name: 'Netflix 1 Aylıq', price: 5.99, desc: '📺 4K Ultra HD <br> 🔒 Şəxsi Profil (Şifrəli) <br> 🛡️ Tam Zəmanət' },
+    { id: 102, catId: 'netflix', name: 'Netflix 3 Aylıq', price: 14.99, desc: '📺 4K Ultra HD <br> ⏳ 3 Ay Kəsintisiz <br> 🛡️ Tam Zəmanət' },
 
-    // Gemini
-    { id: 201, catId: 'gemini', name: 'Gemini Advanced 1 Ay', price: 25, desc: 'Google AI Premium • Ən Güclü Model' },
+    // --- SPOTIFY ---
+    { id: 201, catId: 'spotify', name: 'Spotify 1 Aylıq', price: 4.99, desc: '🎵 Yüksək Səs Keyfiyyəti <br> 🚫 Reklamsız Dinləmə <br> 👤 Fərdi Plan' },
+    { id: 202, catId: 'spotify', name: 'Spotify 3 Aylıq', price: 11.99, desc: '🎵 3 Ay Premium <br> ⏭️ Mahnı Keçmə Haqqı <br> 🛡️ Tam Zəmanət' },
 
-    // PUBG
-    { id: 301, catId: 'pubg', name: '60 UC', price: 2, desc: 'Global ID Yükləmə • Bonuslu' },
+    // --- YOUTUBE ---
+    { id: 301, catId: 'youtube', name: 'YouTube 1 Aylıq', price: 4.99, desc: '🚫 Reklamsız Video <br> 📱 Arxa Planda Oynatma <br> 🎁 YouTube Music Hədiyyə' },
+    { id: 302, catId: 'youtube', name: 'YouTube 3 Aylıq', price: 11.99, desc: '⏳ 3 Ay Premium <br> ⬇️ Videoları Yüklə <br> 🛡️ Tam Zəmanət' },
 
-    // Minecraft
-    { id: 401, catId: 'minecraft', name: 'Minecraft Premium', price: 35, desc: 'Orijinal Java & Bedrock Edition • Tam Hesab' },
+    // --- GEMINI ---
+    { id: 401, catId: 'gemini', name: 'Gemini Advanced 1 Ay', price: 4.99, desc: '🧠 Google AI 1.5 Pro <br> 🚀 Ən Son Model <br> 💻 Kodlama və Analiz' },
 
-    // Netflix
-    { id: 501, catId: 'netflix', name: 'Netflix 1 Ay (4K)', price: 6, desc: 'Ultra HD • Şəxsi Profil • Zəmanətli' },
+    // --- MINECRAFT ---
+    { id: 501, catId: 'minecraft', name: 'Minecraft Premium', price: 19.99, desc: '🌍 Java & Bedrock <br> 🛡️ Ömürlük Zəmanət <br> 👕 Skin/Nick Dəyişmə' },
 
-    // Spotify
-    { id: 601, catId: 'spotify', name: 'Spotify Individual 1 Ay', price: 5, desc: 'Reklamsız Musiqi • Fərdi Plan' },
+    // --- STEAM ---
+    { id: 601, catId: 'steam', name: 'Steam - 3 Oyun', price: 8.99, desc: '🎮 İstənilən 3 Oyun <br> 📂 Offline (Kariyer/Hekayə) <br> ♾️ Ömürlük Giriş' },
 
-    // Steam
-    { id: 701, catId: 'steam', name: 'Steam 10$ Kodu', price: 18, desc: 'USD Cüzdan Kodu • Qlobal Aktivasiya' },
+    // --- VALORANT TR (TURKEY) ---
+    { id: 701, catId: 'valorant', name: '[TR] 375 VP', price: 6.99, desc: '🇹🇷 Türkiyə Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
+    { id: 702, catId: 'valorant', name: '[TR] 875 VP', price: 12.99, desc: '🇹🇷 Türkiyə Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
+    { id: 703, catId: 'valorant', name: '[TR] Battle Pass', price: 16.49, desc: '🎟️ Sezon Bileti Üçün <br> ⚡ Anında Təslim <br> 💎 Rəsmi Kod' },
+    { id: 704, catId: 'valorant', name: '[TR] 1700 VP', price: 20.99, desc: '🇹🇷 Türkiyə Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
+    { id: 705, catId: 'valorant', name: '[TR] 2925 VP', price: 34.99, desc: '🇹🇷 Türkiyə Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
+    { id: 706, catId: 'valorant', name: '[TR] 4325 VP', price: 49.99, desc: '🇹🇷 Türkiyə Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
+    { id: 707, catId: 'valorant', name: '[TR] 8900 VP', price: 96.99, desc: '🇹🇷 Türkiyə Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
 
-    // Valorant
-    { id: 801, catId: 'valorant', name: '115 VP', price: 2.5, desc: 'TR Server • Anında Çatdırılma' },
+    // --- VALORANT EU (EUROPE) ---
+    { id: 751, catId: 'valorant', name: '[EU] 475 VP', price: 10.99, desc: '🇪🇺 Avropa Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
+    { id: 752, catId: 'valorant', name: '[EU] 1000 VP', price: 18.99, desc: '🇪🇺 Avropa Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
+    { id: 753, catId: 'valorant', name: '[EU] 2050 VP', price: 68.99, desc: '🇪🇺 Avropa Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
+    { id: 754, catId: 'valorant', name: '[EU] 5350 VP', price: 86.99, desc: '🇪🇺 Avropa Serveri <br> ⚡ 7/24 Anında Təslim <br> 💎 Rəsmi Riot Kodu' },
 
-    // YouTube
-    { id: 901, catId: 'youtube', name: 'YouTube Premium 1 Ay', price: 4, desc: 'Reklamsız Video • Arxa Planda Oynatma' }
+    // --- PUBG MOBILE (GLOBAL) ---
+    { id: 801, catId: 'pubg', name: '60 UC', price: 2.99, desc: '🌍 Global E-pin <br> ✅ Ban Riski Yoxdur <br> 🚀 Avtomatik Təslim' },
+    { id: 802, catId: 'pubg', name: '325 UC', price: 8.99, desc: '🌍 Global E-pin <br> 🎁 +Bonus Daxil <br> 🚀 Avtomatik Təslim' },
+    { id: 803, catId: 'pubg', name: '660 UC', price: 17.99, desc: '🌍 Global E-pin <br> 🎁 +Bonus Daxil <br> 🚀 Avtomatik Təslim' },
+    { id: 804, catId: 'pubg', name: '3850 UC', price: 79.99, desc: '🌍 Global E-pin <br> 🎁 +Bonus Daxil <br> 🚀 Avtomatik Təslim' },
+    { id: 805, catId: 'pubg', name: '16200 UC', price: 311.99, desc: '🌍 Global E-pin <br> 🎁 +Bonus Daxil <br> 🚀 Avtomatik Təslim' },
+
+    // --- EFOOTBALL (MOBILE) ---
+    { id: 901, catId: 'efootball', name: '130 Coins', price: 2.99, desc: '🆔 Yalnız ID ilə <br> ⚡ Sürətli Yükləmə <br> ✅ Rəsmi Alış' },
+    { id: 902, catId: 'efootball', name: '300 Coins', price: 6.99, desc: '🆔 Yalnız ID ilə <br> ⚡ Sürətli Yükləmə <br> ✅ Rəsmi Alış' },
+    { id: 903, catId: 'efootball', name: '550 Coins', price: 9.99, desc: '🆔 Yalnız ID ilə <br> ⚡ Sürətli Yükləmə <br> ✅ Rəsmi Alış' },
+    { id: 904, catId: 'efootball', name: '750 Coins', price: 12.99, desc: '🆔 Yalnız ID ilə <br> ⚡ Sürətli Yükləmə <br> ✅ Rəsmi Alış' },
+    { id: 905, catId: 'efootball', name: '1040 Coins', price: 15.99, desc: '🆔 Yalnız ID ilə <br> ⚡ Sürətli Yükləmə <br> ✅ Rəsmi Alış' },
+    { id: 906, catId: 'efootball', name: '2130 Coins', price: 29.99, desc: '🆔 Yalnız ID ilə <br> ⚡ Sürətli Yükləmə <br> ✅ Rəsmi Alış' },
+    { id: 907, catId: 'efootball', name: '3250 Coins', price: 43.99, desc: '🆔 Yalnız ID ilə <br> ⚡ Sürətli Yükləmə <br> ✅ Rəsmi Alış' },
+    { id: 908, catId: 'efootball', name: '5700 Coins', price: 69.99, desc: '🆔 Yalnız ID ilə <br> ⚡ Sürətli Yükləmə <br> ✅ Rəsmi Alış' },
+    { id: 909, catId: 'efootball', name: '12800 Coins', price: 148.99, desc: '🆔 Yalnız ID ilə <br> ⚡ Sürətli Yükləmə <br> ✅ Rəsmi Alış' }
 ];
 
 // Qlobal Dəyişənlər
 let db = { products: DEFAULT_PRODS, categories: DEFAULT_CATS, orders: [], balance_requests: [], users: [] };
 let currentUser = null;
 let cart = [];
+
 // ==========================================
 // 2. TOAST BİLDİRİŞ SİSTEMİ
 // ==========================================
@@ -357,27 +391,21 @@ function handleMobileAction(action) {
     if (action === 'profile') openProfileModal();
 }
 // Mobil Axtarış Düyməsi
-// Mobil Axtarış Düyməsi (FIXED)
 function handleMobileSearchFocus() {
     const searchBox = document.querySelector('.search-box');
-    
-    // Əgər axtarış qutusu tapılarsa
     if(searchBox) {
-        // 'mobile-active' klassını əlavə et və ya sil
-        searchBox.classList.toggle('mobile-active');
-        
-        // Əgər açıldısa, yazı yazmaq üçün kursoru içinə qoy
-        if(searchBox.classList.contains('mobile-active')) {
-            const input = searchBox.querySelector('input');
-            if(input) input.focus();
+        // Toggle (Aç/Bağla)
+        if(searchBox.style.display === 'flex') {
+            searchBox.style.display = 'none';
+        } else {
+            searchBox.style.display = 'flex';
+            searchBox.querySelector('input').focus();
         }
     }
-    // Səhifəni yuxarı qaldır ki, istifadəçi axtarış yerini görsün
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
+// Export
 window.handleMobileSearchFocus = handleMobileSearchFocus;
-
 // ==========================================
 // 6. PROFİL VƏ DOĞRULAMA
 // ==========================================
@@ -909,4 +937,3 @@ window.submitDelivery = submitDelivery;
 window.renderAdminUsers = renderAdminUsers;
 window.renderUserHomeFromAdmin = renderUserHomeFromAdmin;
 window.openInfoModal = openInfoModal;
-
