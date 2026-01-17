@@ -76,7 +76,68 @@ async function sendRequest(data) {
         return { status: "error" };
     }
 }
+// ==========================================
+// MƏLUMAT SƏHİFƏLƏRİ (FOOTER)
+// ==========================================
+function openInfoModal(type) {
+    if(!document.getElementById('modal-overlay')) createModalHTML();
 
+    let title = "";
+    let content = "";
+
+    // Mətnlər buradadır (İstədiyin vaxt dəyişə bilərsən)
+    if (type === 'about') {
+        title = "Biz Kimik?";
+        content = `
+            <p>Aurahub, rəqəmsal dünyada ən sərfəli qiymətə oyun kodları, abunəliklər və premium hesablar təklif edən etibarlı platformadır.</p>
+            <p>Məqsədimiz müştərilərimizə sürətli, təhlükəsiz və keyfiyyətli xidmət göstərməkdir. 7/24 Dəstək xidmətimizlə hər zaman yanınızdayıq.</p>
+        `;
+    } 
+    else if (type === 'terms') {
+        title = "İstifadə Qaydaları";
+        content = `
+            <div style="text-align:left; color:#cbd5e1;">
+                <p><i class="fas fa-clock" style="color:#f59e0b;"></i> <b>Çatdırılma Müddəti:</b> Məhsulu aldıqdan sonra və ya balans artırdıqdan sonra sifarişiniz <b>maksimum 1 saat</b> ərzində "Sifarişlərim" bölməsinə və ya balansınıza yüklənir.</p>
+                <hr style="border-color:#334155; margin:10px 0;">
+                <p><i class="fas fa-headset" style="color:#6366f1;"></i> <b>Dəstək:</b> Əgər 1 saat keçdiyi halda məhsul gəlməyibsə və ya balans oturmayıbsa, dərhal aşağıdakı kanallardan bizimlə əlaqə saxlayın:</p>
+                <ul style="margin-top:10px; list-style:none;">
+                    <li><i class="fab fa-whatsapp"></i> Whatsapp Dəstək</li>
+                    <li><i class="fab fa-instagram"></i> Instagram (@aurahub)</li>
+                </ul>
+            </div>
+        `;
+    } 
+    else if (type === 'privacy') {
+        title = "Məxfilik Siyasəti";
+        content = `
+            <p>İstifadəçilərin şəxsi məlumatları (Gmail, şifrə və ödəniş çekləri) tamamilə məxfi saxlanılır.</p>
+            <p>Aurahub, istifadəçi məlumatlarını heç bir üçüncü tərəflə paylaşmır. Daxil etdiyiniz məlumatlar yalnız sifarişin icrası üçün istifadə olunur.</p>
+        `;
+    } 
+    else if (type === 'refund') {
+        title = "Geri Qaytarma Siyasəti";
+        content = `
+            <div style="text-align:left; color:#cbd5e1;">
+                <p style="color:#ef4444; font-weight:bold;"><i class="fas fa-exclamation-circle"></i> Vacib Şərtlər:</p>
+                <ul style="margin-left:20px; margin-top:10px;">
+                    <li style="margin-bottom:10px;">Geri ödəniş və ya dəyişim <b>YALNIZ</b> biz tərəfdən verilən hesabın şifrəsi yanlış çıxarsa edilir.</li>
+                    <li style="margin-bottom:10px;">Hesaba daxil olduqdan sonra ayarlarda (Profil adı, Şifrə, Plan, Dil və s.) hər hansı bir dəyişiklik edilərsə:
+                        <br><span style="color:#ef4444;">- Zəmanət ləğv olunur.</span>
+                        <br><span style="color:#ef4444;">- Geri ödəniş edilmir.</span>
+                        <br><span style="color:#ef4444;">- İstifadəçi bloklanır.</span>
+                    </li>
+                </ul>
+            </div>
+        `;
+    }
+
+    // Modalı Aç
+    const html = `<h2 style="color:white; margin-bottom:20px; border-bottom:1px solid #334155; padding-bottom:10px;">${title}</h2>
+                  <div style="font-size:0.95rem; line-height:1.6; color:#94a3b8;">${content}</div>`;
+    
+    document.getElementById('modal-dynamic-content').innerHTML = html;
+    document.getElementById('modal-overlay').style.display = 'flex';
+}
 // ==========================================
 // 4. INIT (BAŞLATMA)
 // ==========================================
@@ -770,3 +831,4 @@ window.openDelModal = openDelModal;
 window.submitDelivery = submitDelivery;
 window.renderAdminUsers = renderAdminUsers;
 window.renderUserHomeFromAdmin = renderUserHomeFromAdmin;
+window.openInfoModal = openInfoModal;
