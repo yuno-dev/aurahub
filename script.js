@@ -357,21 +357,27 @@ function handleMobileAction(action) {
     if (action === 'profile') openProfileModal();
 }
 // Mobil Axtarış Düyməsi
+// Mobil Axtarış Düyməsi (FIXED)
 function handleMobileSearchFocus() {
     const searchBox = document.querySelector('.search-box');
+    
+    // Əgər axtarış qutusu tapılarsa
     if(searchBox) {
-        // Toggle (Aç/Bağla)
-        if(searchBox.style.display === 'flex') {
-            searchBox.style.display = 'none';
-        } else {
-            searchBox.style.display = 'flex';
-            searchBox.querySelector('input').focus();
+        // 'mobile-active' klassını əlavə et və ya sil
+        searchBox.classList.toggle('mobile-active');
+        
+        // Əgər açıldısa, yazı yazmaq üçün kursoru içinə qoy
+        if(searchBox.classList.contains('mobile-active')) {
+            const input = searchBox.querySelector('input');
+            if(input) input.focus();
         }
     }
+    // Səhifəni yuxarı qaldır ki, istifadəçi axtarış yerini görsün
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-// Export
+
 window.handleMobileSearchFocus = handleMobileSearchFocus;
+
 // ==========================================
 // 6. PROFİL VƏ DOĞRULAMA
 // ==========================================
@@ -903,3 +909,4 @@ window.submitDelivery = submitDelivery;
 window.renderAdminUsers = renderAdminUsers;
 window.renderUserHomeFromAdmin = renderUserHomeFromAdmin;
 window.openInfoModal = openInfoModal;
+
