@@ -1739,4 +1739,37 @@ button:disabled {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
+}/* ======================================================
+   MOBİL MENYU VƏ MODAL ÇAKIŞMASI FIX (SON VƏ DƏQİQ)
+   ====================================================== */
+
+@media (max-width: 768px) {
+
+    /* 1. ƏSAS SƏHİFƏNİN DİBİ (Məhsullar menyunun altında qalmasın) */
+    body {
+        padding-bottom: 120px !important; 
+    }
+
+    /* 2. MODALLARI (Səbət, Profil, Sifariş) YUXARI QALDIR */
+    .modal-overlay {
+        z-index: 10002 !important; /* Modallar hər şeyin (Menyunun da) üstündə olsun */
+        padding-bottom: 90px !important; /* Aşağıdan menyu qədər boşluq burax */
+        align-items: flex-end !important; /* Pəncərəni aşağı tərəfə çək */
+    }
+
+    .modal-box {
+        margin: 0 !important; /* Kənarlara yapışdır */
+        width: 100% !important; /* Tam genişlik */
+        border-bottom-left-radius: 0 !important; /* Aşağı küncləri düz elə */
+        border-bottom-right-radius: 0 !important;
+        border-top-left-radius: 20px !important; /* Üst küncləri yuvarlaq */
+        border-top-right-radius: 20px !important;
+        max-height: 80vh !important; /* Ekranın 80%-dən çox yer tutmasın */
+        overflow-y: auto !important; /* İçi dolanda sürüşsün */
+    }
+
+    /* 3. MOBİL MENYU (Modaldan aşağıda qalsın) */
+    .mobile-bottom-nav {
+        z-index: 9999 !important; /* Modal (10002) bundan yuxarıda olacaq */
+    }
 }
