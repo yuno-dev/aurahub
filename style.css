@@ -1920,4 +1920,48 @@ button:disabled {
     .ah-sub-text { font-size: 0.95rem; }
     .ah-icon { font-size: 2.5rem; opacity: 0.05; }
     .ah-action-btn { padding: 12px 25px; font-size: 1rem; }
+}/* ======================================================
+   MOBİL MENYU VƏ MODAL ÇAKIŞMASI FIX (NUCLEAR VERSION)
+   ====================================================== */
+
+@media (max-width: 768px) {
+
+    /* 1. AŞAĞI MENYU (Səviyyəsi: Orta) */
+    .mobile-bottom-nav {
+        z-index: 5000 !important; /* Modal bundan yüksək olacaq */
+        height: 70px !important;
+        padding-bottom: env(safe-area-inset-bottom); /* iPhone X üçün qoruma */
+    }
+
+    /* 2. MODAL ÖRTÜYÜ (Səviyyəsi: Ən Yüksək) */
+    .modal-overlay {
+        z-index: 99999 !important; /* Menyunun üstünə çıxır */
+        padding: 0 !important;
+        align-items: flex-end !important; /* Aşağıdan yuxarı çıxsın */
+        background: rgba(0, 0, 0, 0.8) !important; /* Arxanı tam qaraltsın */
+        backdrop-filter: blur(5px);
+    }
+
+    /* 3. MODAL QUTUSU (Dizaynı) */
+    .modal-box {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border-radius: 25px 25px 0 0 !important; /* Sadəcə üst tərəflər yuvarlaq */
+        border: none !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        
+        /* Menyunun üstündə dursun deyə aşağıdan boşluq veririk */
+        margin-bottom: 70px !important; /* Menyu hündürlüyü qədər yuxarı qalxır */
+        
+        max-height: 80vh !important; /* Ekranın 80%-i qədər */
+        overflow-y: auto !important;
+        position: relative !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* 4. MODAL İÇİNDƏKİ MƏTNLƏRİN SÜRÜŞMƏSİ */
+    .custom-scrollbar {
+        padding-bottom: 20px !important;
+    }
 }
