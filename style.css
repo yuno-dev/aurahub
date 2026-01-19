@@ -1739,37 +1739,185 @@ button:disabled {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
-}/* ======================================================
-   MOBİL MENYU VƏ MODAL ÇAKIŞMASI FIX (SON VƏ DƏQİQ)
-   ====================================================== */
+}/* =========================================
+   CANLI SATIŞ BİLDİRİMİ (CLEAN CODE)
+   ========================================= */
+.live-toast {
+    position: fixed;
+    left: 20px;
+    bottom: 30px; /* PC için */
+    background: #1e293b; /* Koyu Mavi/Gri */
+    border: 1px solid #334155;
+    border-left: 4px solid #10b981; /* Yeşil Çizgi */
+    padding: 15px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    z-index: 100000; /* En üstte */
+    min-width: 260px;
+    
+    /* GİZLEME AYARLARI */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-150%); /* Solda gizli */
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
 
+/* GÖRÜNME AYARI (JS bu sınıfı ekleyecek) */
+.live-toast.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0); /* Yerine gel */
+}
+
+/* İÇERİK TASARIMI */
+.live-icon {
+    font-size: 1.5rem;
+    color: #10b981;
+}
+
+.live-content {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.3;
+}
+
+.live-user {
+    color: #f8fafc;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.live-product {
+    color: #a5b4fc; /* İndigo */
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.live-text {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.live-content small {
+    color: #64748b;
+    font-size: 0.7rem;
+}
+
+/* MOBİL İÇİN ÖZEL AYAR (Menünün üstüne çıksın) */
 @media (max-width: 768px) {
-
-    /* 1. ƏSAS SƏHİFƏNİN DİBİ (Məhsullar menyunun altında qalmasın) */
-    body {
-        padding-bottom: 120px !important; 
+    .live-toast {
+        bottom: 95px !important; /* Alt menüden yukarıda */
+        left: 10px;
+        right: 10px;
+        width: auto;
     }
+}/* ==========================================
+   YENİ BANNER TASARIMI (Conflict Fix)
+   ========================================== */
+.ah-banner-area {
+    position: relative;
+    overflow: hidden;
+    margin: 20px;
+    border-radius: 20px;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Yeni ve daha canlı gradient */
+    background: linear-gradient(120deg, #020617 0%, #1e1b4b 50%, #4338ca 100%);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.05);
+}
 
-    /* 2. MODALLARI (Səbət, Profil, Sifariş) YUXARI QALDIR */
-    .modal-overlay {
-        z-index: 10002 !important; /* Modallar hər şeyin (Menyunun da) üstündə olsun */
-        padding-bottom: 90px !important; /* Aşağıdan menyu qədər boşluq burax */
-        align-items: flex-end !important; /* Pəncərəni aşağı tərəfə çək */
-    }
+.ah-banner-content {
+    position: relative;
+    z-index: 20;
+    text-align: center;
+    padding: 30px;
+}
 
-    .modal-box {
-        margin: 0 !important; /* Kənarlara yapışdır */
-        width: 100% !important; /* Tam genişlik */
-        border-bottom-left-radius: 0 !important; /* Aşağı küncləri düz elə */
-        border-bottom-right-radius: 0 !important;
-        border-top-left-radius: 20px !important; /* Üst küncləri yuvarlaq */
-        border-top-right-radius: 20px !important;
-        max-height: 80vh !important; /* Ekranın 80%-dən çox yer tutmasın */
-        overflow-y: auto !important; /* İçi dolanda sürüşsün */
-    }
+.ah-main-title {
+    font-size: 3.8rem;
+    font-weight: 900;
+    /* Parlak Beyaz-Mavi geçişi */
+    background: linear-gradient(to right, #ffffff 20%, #818cf8 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+    letter-spacing: -2px;
+    text-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
 
-    /* 3. MOBİL MENYU (Modaldan aşağıda qalsın) */
-    .mobile-bottom-nav {
-        z-index: 9999 !important; /* Modal (10002) bundan yuxarıda olacaq */
-    }
+.ah-sub-text {
+    color: #cbd5e1;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+
+/* Aksiyon Butonu */
+.ah-action-btn {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 14px 35px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ah-action-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5);
+    background: #059669;
+}
+
+/* --- YÜZEN İKONLAR (Benzersiz İsimler) --- */
+.ah-anim-icons {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.ah-icon {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.03); /* Çok çok silik */
+    font-size: 4rem;
+    animation: ahFloat 7s infinite ease-in-out;
+}
+
+/* İkon Pozisyonları */
+.ah-i1 { top: 12%; left: 8%; font-size: 3.5rem; animation-duration: 8s; }
+.ah-i2 { bottom: 15%; left: 15%; font-size: 6rem; animation-duration: 10s; }
+.ah-i3 { top: 18%; right: 12%; font-size: 4.5rem; animation-duration: 7s; }
+.ah-i4 { bottom: 12%; right: 20%; font-size: 4rem; animation-duration: 9s; }
+.ah-i5 { top: 55%; left: 5%; font-size: 2.5rem; animation-duration: 11s; }
+.ah-i6 { top: 45%; right: 5%; font-size: 3rem; animation-duration: 13s; }
+
+/* Yüzme Animasyonu */
+@keyframes ahFloat {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-25px) rotate(8deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Mobil Ayarlar */
+@media (max-width: 768px) {
+    .ah-banner-area { margin: 10px; min-height: 250px; }
+    .ah-main-title { font-size: 2.8rem; }
+    .ah-sub-text { font-size: 0.95rem; }
+    .ah-icon { font-size: 2.5rem; opacity: 0.05; }
+    .ah-action-btn { padding: 12px 25px; font-size: 1rem; }
 }
