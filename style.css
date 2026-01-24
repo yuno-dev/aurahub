@@ -1965,3 +1965,103 @@ button:disabled {
         padding-bottom: 20px !important;
     }
 }
+/* ==========================================
+   SABİT + TAM GÖRÜNÜM SLIDESHOW (KESME YOK)
+   ========================================== */
+
+.slideshow-wrapper {
+    max-width: 1280px;
+    margin: 20px auto;
+    position: relative;
+    padding: 0 10px;
+}
+
+.slideshow-container {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #020617; /* Kenar boşluğu kalırsa görünecek renk */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+
+    /* Masaüstü Oranı: Geniş Banner (21:9) */
+    /* Eğer resimlerin daha kareyse burayı 16/9 yapabilirsin */
+    aspect-ratio: 21 / 9; 
+    width: 100%;
+}
+
+.mySlides {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.mySlides img {
+    width: 100%;
+    height: 100% !important;
+    
+    /* ⚠️ DEĞİŞİKLİK BURADA: 'contain' YAPTIK
+       Bu sayede resmin tamamını kutunun içine sığdırır.
+       Asla kesme yapmaz, yazılar kaybolmaz. */
+    object-fit: contain; 
+    object-position: center; 
+    display: block;
+}
+
+/* Animasyon */
+.fade {
+    animation-name: fade;
+    animation-duration: 0.8s;
+}
+
+@keyframes fade {
+    from {opacity: 0.6} 
+    to {opacity: 1}
+}
+
+/* Oklar */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 12px 18px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.3s ease;
+    border-radius: 50%;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    user-select: none;
+    z-index: 10;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.next { right: 15px; }
+.prev { left: 15px; }
+
+.prev:hover, .next:hover {
+    background-color: #6366f1;
+    border-color: #6366f1;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* MOBİL AYARLARI */
+@media only screen and (max-width: 768px) {
+    .slideshow-container {
+        /* Telefonda kutuyu biraz daha yükseltiyoruz (16:9)
+           Böylece resim çok küçülmez */
+        aspect-ratio: 16 / 9; 
+    }
+    
+    .prev, .next {
+        padding: 8px 12px;
+        font-size: 14px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
