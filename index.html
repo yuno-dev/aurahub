@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurahub - Futbol Ekosistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo"><i class="fa-solid fa-futbol"></i> AURA<span>HUB</span></div>
+            <nav class="nav-links">
+                <a href="#" class="active">Ana Səhifə</a>
+                <a href="#ads-section">Elanlar</a>
+                <a href="#footer">Haqqımızda</a>
+            </nav>
+            <div id="nav-actions">
+                </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <div class="hero-section">
+            <h1>Meydanda Yerin Hazırdır.</h1>
+            <p>Futbol oynamaq üçün komanda tap və ya çatışmayan oyunçunu axtar. Hər şey bir toxunuşla.</p>
+            <button class="action-btn create-btn" onclick="requireAuth(openCreateModal)">
+                <i class="fa-solid fa-plus"></i> Yeni Elan Yarat
+            </button>
+        </div>
+
+        <div id="ads-section" class="feed-section">
+            <div class="feed-header">
+                <h3 class="section-title">Aktiv Elanlar</h3>
+                <div class="filter-group">
+                    <button class="filter-btn active" onclick="filterAds('all')">Hamısı</button>
+                    <button class="filter-btn" onclick="filterAds('match')">Oyunçu Axtaranlar</button>
+                    <button class="filter-btn" onclick="filterAds('player')">Oyun Axtaranlar</button>
+                </div>
+            </div>
+            
+            <div id="ads-container" class="ads-grid">
+                </div>
+        </div>
+    </main>
+
+    <footer id="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>AURA<span>HUB</span></h3>
+                <p>Dünyanın (hələlik Bakının) #1 nömrəli futbol şəbəkəsi.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Menyu</h4>
+                <a href="#">Ana Səhifə</a>
+                <a href="#">Qaydalar</a>
+                <a href="#">Məxfilik Siyasəti</a>
+            </div>
+            <div class="footer-social">
+                <h4>Bizi İzləyin</h4>
+                <a href="#"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                <a href="#"><i class="fa-brands fa-telegram"></i> Telegram</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Aurahub. Bütün hüquqlar qorunur.</p>
+        </div>
+    </footer>
+
+    <div id="toast-container"></div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2><i class="fa-solid fa-right-to-bracket"></i> Sistemə Daxil Ol</h2>
+            <p class="modal-subtitle">Davam etmək üçün profil yarat.</p>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="username" placeholder="Ad, Soyad">
+            </div>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-calendar-days"></i>
+                <input type="number" id="age" placeholder="Yaş">
+            </div>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-shoe-prints"></i>
+                <select id="position">
+                    <option value="Hücumçu">Hücumçu</option>
+                    <option value="Yarımmüdafiəçi">Yarımmüdafiəçi</option>
+                    <option value="Müdafiəçi">Müdafiəçi</option>
+                    <option value="Qapıçı">Qapıçı</option>
+                </select>
+            </div>
+            <button class="action-btn submit-btn" onclick="login()">Giriş Et <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('profileModal')">&times;</span>
+            <h2><i class="fa-solid fa-id-card"></i> Profilim</h2>
+            <div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" id="edit-username"></div>
+            <div class="input-wrapper"><i class="fa-solid fa-calendar-days"></i><input type="number" id="edit-age"></div>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-shoe-prints"></i>
+                <select id="edit-position">
+                    <option value="Hücumçu">Hücumçu</option>
+                    <option value="Yarımmüdafiəçi">Yarımmüdafiəçi</option>
+                    <option value="Müdafiəçi">Müdafiəçi</option>
+                    <option value="Qapıçı">Qapıçı</option>
+                </select>
+            </div>
+<!-- Profil Modalına bunları əlavə et -->
+<div class="input-wrapper">
+    <i class="fa-solid fa-phone"></i>
+    <input type="text" id="edit-phone" placeholder="Əlaqə nömrəsi">
+</div>
+<div class="input-wrapper">
+    <i class="fa-solid fa-trophy"></i>
+    <select id="edit-skill">
+        <option value="Başlanğıc">Başlanğıc</option>
+        <option value="Orta">Orta</option>
+        <option value="Güclü">Güclü</option>
+        <option value="Professional">Professional</option>
+    </select>
+</div>
+            <button class="action-btn submit-btn" onclick="updateProfile()">Yadda Saxla</button>
+            <button class="danger-btn" onclick="logout()">Hesabdan Çıx</button>
+        </div>
+    </div>
+
+<!-- BURA SENIN ELA YARATMA MODALINDIR -->
+<div id="createModal" class="modal">
+    <div class="modal-content create-modal-content">
+        <span class="close" onclick="closeModal('createModal')">&times;</span>
+        <h2><i class="fa-solid fa-bullhorn"></i> Elan Yarat</h2>
+        
+        <div class="ad-type-selector">
+            <input type="radio" id="type-match" name="adType" value="match" checked onchange="toggleAdInputs()">
+            <label for="type-match"><i class="fa-solid fa-users"></i> Oyunçu Axtarıram</label>
+            
+            <input type="radio" id="type-player" name="adType" value="player" onchange="toggleAdInputs()">
+            <label for="type-player"><i class="fa-solid fa-person-running"></i> Oyun Axtarıram</label>
+        </div>
+        
+        <div id="match-inputs" class="form-section animate-fade">
+            <div class="input-wrapper"><i class="fa-solid fa-location-dot"></i><input type="text" id="stadium" placeholder="Stadion (məs: Azfar)"></div>
+            <div class="input-wrapper"><i class="fa-solid fa-clock"></i><input type="datetime-local" id="time"></div>
+            <div class="input-wrapper"><i class="fa-solid fa-manat-sign"></i><input type="number" id="price" placeholder="Qiymət (AZN)"></div>
+        </div>
+        
+        <div id="player-inputs" class="form-section animate-fade" style="display: none;">
+            <div class="input-wrapper"><i class="fa-solid fa-pen"></i><input type="text" id="note" placeholder="Özün haqqında qeyd (məs: Cümə günü boşam)"></div>
+        </div>
+
+        <button class="action-btn submit-btn" onclick="submitAd()">Elanı Paylaş <i class="fa-solid fa-check"></i></button>
+    </div>
+</div>
+<div id="infoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('infoModal')">&times;</span>
+        <h2><i class="fa-solid fa-user"></i> İstifadəçi Məlumatı</h2>
+        <div id="info-modal-body" style="margin-top: 20px;">
+            <!-- Məlumatlar bura JS ilə gələcək -->
+        </div>
+    </div>
+</div>
+
+            
+           
+
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
