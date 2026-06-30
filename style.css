@@ -1897,4 +1897,42 @@ body.light-mode .premium-stats {
         font-size: 9px;
         padding: 2px 6px;
     }
+}/* ========================================================
+   SAFARİ VƏ İOS (iPhone) ÜÇÜN XÜSUSİ OPTİMİZASİYA KODLARI
+======================================================== */
+
+/* 1. Safari-nin input və select qutularına qoyduğu eybəcər dizaynı ləğv edirik */
+input, select, textarea, button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 8px; /* Safari bəzən küncləri fərqli edir */
+}
+
+/* 2. Düymələrə basanda iPhone-da yaranan o qara/boz kölgəni silirik */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 3. iPhone-da sürüşdürmənin (scroll) qırılmaması, yağ kimi axması üçün */
+body, .modal-content, #public-premium-card-bg, .chip-group {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 4. Safari-nin "100vh" (Tam Ekran) problemi (Aşağıdakı navbarın arxasında gizlənmə) */
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    min-height: 100dvh; /* Ən müasir həll */
+}
+html {
+    height: -webkit-fill-available;
+}
+
+/* iPhone-un ən altındakı "Home" xəttinə (Safe Area) toxunmaması üçün boşluqlar */
+.nav-links {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+.modal-content {
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
