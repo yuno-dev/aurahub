@@ -1679,3 +1679,222 @@ body.light-mode .premium-stats {
     transform: scale(1.05); 
     box-shadow: 0 4px 10px rgba(202,255,4,0.3);
 }
+/* =========================================================
+   📱 RESPONSIVE (MOBİL UYUMLULUQ) TƏNZİMLƏMƏLƏRİ
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .team-builder-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .pitch-wrapper, .roster-panel {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Navbar Tənzimləməsi */
+    .nav-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .nav-links a {
+        font-size: 13px;
+        padding: 5px 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+    }
+
+    /* Hero Section (Ana Başlıq) */
+    .hero-section {
+        padding: 40px 15px;
+    }
+
+    .hero-section h1 {
+        font-size: 28px;
+    }
+
+    .hero-section p {
+        font-size: 14px;
+    }
+
+    /* Elanlar və Grid Tənzimləmələri */
+    .ads-grid {
+        grid-template-columns: 1fr; /* Mobildə tək sütün */
+    }
+
+    .feed-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .modern-filters {
+        align-items: stretch;
+    }
+
+    .filter-tabs {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .tab-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .sub-filters {
+        flex-direction: column;
+    }
+
+    .filter-item {
+        width: 100%;
+        min-width: unset;
+    }
+
+    /* Kartlar (Ad Card & Premium Card) */
+    .ad-card, .champ-card, .scout-card {
+        padding: 15px;
+    }
+
+    .premium-player-card {
+        padding: 30px 15px 20px;
+    }
+
+    .premium-name {
+        font-size: 18px;
+    }
+
+    .stat-box strong {
+        font-size: 12px;
+    }
+
+    .card-actions {
+        flex-direction: column;
+    }
+
+    .card-actions button {
+        width: 100%;
+    }
+
+    /* Modallar */
+    .modal-content {
+        width: 95%;
+        padding: 20px 15px;
+    }
+
+    .profile-tabs {
+        flex-wrap: wrap;
+    }
+
+    .profile-tab-btn {
+        padding: 12px 10px;
+        font-size: 12px;
+    }
+
+    .profile-tab-content {
+        padding: 15px 10px;
+    }
+
+    /* Çempionat Səhifəsi */
+    .champ-hero h1 {
+        font-size: 24px;
+    }
+
+    .champ-prize h2 {
+        font-size: 28px;
+    }
+
+    .champ-prize {
+        padding: 15px 20px;
+    }
+
+    .champ-contacts {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0 20px;
+    }
+
+    .champ-contacts a {
+        width: 100%;
+        min-width: unset;
+    }
+
+    /* Footer */
+    .footer-top {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .footer-links-section {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .footer-col {
+        text-align: center;
+    }
+
+    .footer-col h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .footer-brand-section {
+        text-align: center;
+    }
+
+    .footer-social-modern {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Çox kiçik ekranlar üçün ekstra tənzimləmə */
+    .logo {
+        font-size: 18px;
+    }
+    
+    #nav-actions button {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .ad-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .top-players-grid {
+        padding-bottom: 10px; /* Scroll üçün yer */
+    }
+
+    .player-mini-card {
+        min-width: 180px;
+        padding: 10px;
+    }
+
+    /* Meydança oyunçuları */
+    .pitch-player-avatar {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+    
+    .pitch-player-name {
+        font-size: 9px;
+        padding: 2px 6px;
+    }
+}
