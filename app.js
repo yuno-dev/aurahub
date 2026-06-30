@@ -1,5 +1,6 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
 import { getFirestore, doc, setDoc, getDocs, collection, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
 const firebaseConfig = {
     apiKey: "AIzaSyCZrOBjlyl9opYDeu8uy5v01BQ-MvX_ZWc",
     authDomain: "aurahub-c97bd.firebaseapp.com",
@@ -32,7 +33,7 @@ const stadiumCoords = {
     "Yasamal Sportster": [40.3950, 49.7900], 
 };
 
-// Firebase-dən ilkin məlumatları yükləmək üçün asinxron funksiya
+// Firebase-dən ilkin məlumatları yükləmək
 async function loadInitialData() {
     try {
         const usersSnap = await getDocs(collection(db, "users"));
@@ -44,7 +45,6 @@ async function loadInitialData() {
         const notifsSnap = await getDocs(collection(db, "notifications"));
         notifications = notifsSnap.docs.map(doc => doc.data());
 
-        // Sessiyanı yadda saxlamaq üçün yalnız istifadəçi adını localStorage-də saxlayırıq
         const savedUsername = localStorage.getItem('aurahub_logged_in_user');
         if (savedUsername) {
             currentUser = allUsers.find(u => u.username === savedUsername) || null;
@@ -56,13 +56,12 @@ async function loadInitialData() {
 }
 
 window.onload = async () => {
-    // Mövzu localStorage-də qalır
     if (localStorage.getItem('aurahub_theme') === 'light') {
         document.body.classList.add('light-mode');
         document.getElementById('theme-toggle').innerHTML = '<i class="fa-solid fa-moon"></i>';
     }
     
-    await loadInitialData(); // Firebase-dən məlumatları gözləyirik
+    await loadInitialData();
     
     updateNav();
     renderTopPlayers();
@@ -70,14 +69,13 @@ window.onload = async () => {
     updateNotificationBadge();
 };
 
-function toggleTheme() {
+window.toggleTheme = function() {
     const isLight = document.body.classList.toggle('light-mode');
     localStorage.setItem('aurahub_theme', isLight ? 'light' : 'dark');
     document.getElementById('theme-toggle').innerHTML = isLight ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
-}
-window.toggleTheme = toggleTheme; // HTML-dən çağıra bilmək üçün
+};
 
-function showToast(message, type = 'success') {
+window.showToast = function(message, type = 'success') {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -85,42 +83,35 @@ function showToast(message, type = 'success') {
     toast.innerHTML = `${icon} ${message}`;
     container.appendChild(toast);
     setTimeout(() => { toast.style.animation = 'fadeOut 0.3s forwards'; setTimeout(() => toast.remove(), 300); }, 3000);
-}
-window.showToast = showToast;
+};
 
 window.updateNav = function() {
     const nav = document.getElementById('nav-actions');
-    if (!nav) return; // Əgər nav tapılmazsa, xəta verməsin
+    if (!nav) return;
 
     if (currentUser) {
         let adminBtn = '';
-        // Əgər istifadəçi Onur və ya Resulelidirsə, xüsusi Qırmızı Admin düyməsi yaradırıq
         if (currentUser.username.toLowerCase() === 'onur' || currentUser.username.toLowerCase() === 'resuleli') {
             adminBtn = `<button class="action-btn" style="background: var(--danger); color: white; margin-right: 10px; border:none; box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);" onclick="openAdminPanel()">
                             <i class="fa-solid fa-user-shield"></i> Admin
                         </button>`;
         }
-        
-        // Həm admin düyməsini (əgər varsa), həm də istifadəçinin adını ekrana basırıq
         nav.innerHTML = `${adminBtn} <button class="action-btn" onclick="openProfile()"><i class="fa-solid fa-user"></i> ${currentUser.username}</button>`;
     } else {
         nav.innerHTML = `<button class="action-btn" onclick="openModal('loginModal')">Daxil Ol</button>`;
     }
 };
-window.updateNav = updateNav;
 
-function requireAuth(actionCallback) {
+window.requireAuth = function(actionCallback) {
     if (currentUser) actionCallback();
     else { openModal('loginModal'); showToast("Zəhmət olmasa əvvəlcə daxil olun.", "error"); }
-}
-window.requireAuth = requireAuth;
+};
 
-function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-function openCreateModal() { openModal('createModal'); }
-window.openModal = openModal; window.closeModal = closeModal; window.openCreateModal = openCreateModal;
+window.openModal = function(id) { document.getElementById(id).style.display = 'flex'; };
+window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; };
+window.openCreateModal = function() { openModal('createModal'); };
 
-function renderTopPlayers() {
+window.renderTopPlayers = function() {
     const container = document.getElementById('top-players-container');
     container.innerHTML = '';
     
@@ -142,11 +133,9 @@ function renderTopPlayers() {
             </div>
         `;
     });
-}
-window.renderTopPlayers = renderTopPlayers;
+};
 
-// FIREBASE: İstifadəçini bazaya sinxronizasiya edirik
-async function syncUserToDB() {
+window.syncUserToDB = async function() {
     if(!currentUser) return;
     
     const index = allUsers.findIndex(u => u.username === currentUser.username);
@@ -156,17 +145,14 @@ async function syncUserToDB() {
         allUsers.push(currentUser); 
     }
     
-    // Firestore-da istifadəçini yeniləyirik/yaradırıq
     try {
         await setDoc(doc(db, "users", currentUser.username), currentUser);
     } catch (error) {
         console.error("İstifadəçi yadda saxlanılarkən xəta: ", error);
     }
-}
-window.syncUserToDB = syncUserToDB;
+};
 
-// FIREBASE: Giriş əməliyyatı
-async function login() {
+window.login = async function() {
     const username = document.getElementById('username').value;
     const age = document.getElementById('age').value;
     const position = document.getElementById('position').value;
@@ -185,18 +171,16 @@ async function login() {
     await syncUserToDB(); 
     
     closeModal('loginModal'); updateNav(); renderTopPlayers(); showToast(`Xoş gəldin, ${username}!`);
-}
-window.login = login;
+};
 
-function switchProfileTab(tabName, btnElement) {
+window.switchProfileTab = function(tabName, btnElement) {
     document.querySelectorAll('.profile-tab-btn').forEach(btn => btn.classList.remove('active'));
     btnElement.classList.add('active');
     document.getElementById('tab-card').style.display = tabName === 'card' ? 'block' : 'none';
     document.getElementById('tab-edit').style.display = tabName === 'edit' ? 'block' : 'none';
-}
-window.switchProfileTab = switchProfileTab;
+};
 
-function openProfile() {
+window.openProfile = function() {
     document.getElementById('edit-username').value = currentUser.username || '';
     document.getElementById('edit-team').value = currentUser.teamName || '';
     document.getElementById('edit-age').value = currentUser.age || '';
@@ -236,18 +220,28 @@ function openProfile() {
         document.getElementById('premium-card-bg').classList.add('pro-glow');
     }
 
+    // Əgər adminlərdən biridirsə, profilin içinə də qırmızı düymə əlavə edirik
+    if (currentUser.username.toLowerCase() === 'onur' || currentUser.username.toLowerCase() === 'resuleli') {
+        const modalContent = document.querySelector('#profileModal .modal-content');
+        if (modalContent && !document.getElementById('admin-panel-btn-profile')) {
+            modalContent.innerHTML += `
+                <button id="admin-panel-btn-profile" class="action-btn" style="background: var(--danger); color: white; width: 100%; margin-top: 15px; border:none;" onclick="openAdminPanel()">
+                    <i class="fa-solid fa-user-shield"></i> Admin Paneli
+                </button>
+            `;
+        }
+    }
+
     document.querySelector('.profile-tab-btn').click();
     openModal('profileModal');
-}
-window.openProfile = openProfile;
+};
 
-function verifyProStatus() {
+window.verifyProStatus = function() {
     const text = `Salam Aurahub. Mən ${currentUser.username}. "Pro Oyunçu" etiketi almaq istəyirəm. Oynadığım klub: `;
     window.open(`https://wa.me/994550000000?text=${encodeURIComponent(text)}`, '_blank');
-}
-window.verifyProStatus = verifyProStatus;
+};
 
-async function uploadAvatar(event) {
+window.uploadAvatar = async function(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
@@ -258,10 +252,9 @@ async function uploadAvatar(event) {
         }
         reader.readAsDataURL(file);
     }
-}
-window.uploadAvatar = uploadAvatar;
+};
 
-async function updateProfile() {
+window.updateProfile = async function() {
     currentUser.username = document.getElementById('edit-username').value;
     currentUser.teamName = document.getElementById('edit-team').value;
     currentUser.age = document.getElementById('edit-age').value;
@@ -272,28 +265,24 @@ async function updateProfile() {
     await syncUserToDB(); 
     
     closeModal('profileModal'); updateNav(); renderTopPlayers(); showToast("Profil yeniləndi!");
-}
-window.updateProfile = updateProfile;
+};
 
-function logout() { 
+window.logout = function() { 
     localStorage.removeItem('aurahub_logged_in_user'); 
     currentUser = null; 
     closeModal('profileModal'); 
     updateNav(); 
     showToast("Hesabdan çıxış edildi."); 
-}
-window.logout = logout;
+};
 
-function updateNotificationBadge() {
+window.updateNotificationBadge = function() {
     if(!currentUser) return;
     const myNotifs = notifications.filter(n => n.to === currentUser.username && n.status === 'pending');
     const badge = document.getElementById('notif-badge');
     if(myNotifs.length > 0) { badge.style.display = 'flex'; badge.innerText = myNotifs.length; } else { badge.style.display = 'none'; }
-}
-window.updateNotificationBadge = updateNotificationBadge;
+};
 
-// FIREBASE: Bildiriş göndərmək
-async function applyToPlay(adId, authorName) {
+window.applyToPlay = async function(adId, authorName) {
     if(authorName === currentUser.username) return showToast("Öz elanınıza müraciət edə bilməzsiniz!", "error");
     if(notifications.find(n => n.adId === adId && n.from === currentUser.username)) return showToast("Siz artıq bu oyuna müraciət etmisiniz.", "error");
 
@@ -314,10 +303,9 @@ async function applyToPlay(adId, authorName) {
     } catch (error) {
         showToast("Müraciət göndərilərkən xəta baş verdi.", "error");
     }
-}
-window.applyToPlay = applyToPlay;
+};
 
-function openNotifications() {
+window.openNotifications = function() {
     const container = document.getElementById('notifications-list');
     const myNotifs = notifications.filter(n => n.to === currentUser.username && n.status === 'pending');
     container.innerHTML = '';
@@ -336,10 +324,9 @@ function openNotifications() {
         });
     }
     openModal('notificationsModal');
-}
-window.openNotifications = openNotifications;
+};
 
-function viewPublicProfile(username) {
+window.viewPublicProfile = function(username) {
     const user = allUsers.find(u => u.username === username);
     
     if (!user) {
@@ -416,12 +403,10 @@ function viewPublicProfile(username) {
         containerAds.innerHTML = `<div style="text-align:center; color:var(--text-muted); font-size:12px; padding:10px; background:rgba(0,0,0,0.2); border-radius:8px;">Bu istifadəçinin aktiv elanı yoxdur.</div>`;
     }
     openModal('publicCardModal');
-}
-window.viewPublicProfile = viewPublicProfile;
-window.viewPlayerCard = viewPublicProfile;
+};
+window.viewPlayerCard = window.viewPublicProfile;
 
-// FIREBASE: Bildiriş vəziyyətini yeniləmək
-async function handleRequest(notifId, action) {
+window.handleRequest = async function(notifId, action) {
     const notifIndex = notifications.findIndex(n => n.id === notifId);
     if(notifIndex > -1) {
         notifications[notifIndex].status = action;
@@ -436,49 +421,42 @@ async function handleRequest(notifId, action) {
             showToast("Əməliyyat xətası baş verdi.", "error");
         }
     }
-}
-window.handleRequest = handleRequest;
+};
 
-function toggleAdInputs() {
+window.toggleAdInputs = function() {
     const type = document.querySelector('input[name="adType"]:checked').value;
     document.getElementById('match-inputs').style.display = (type === 'match' || type === 'opponent') ? 'block' : 'none';
     document.getElementById('player-inputs').style.display = type === 'player' ? 'block' : 'none';
     document.getElementById('player-count-wrapper').style.display = type === 'opponent' ? 'none' : 'block';
-}
-window.toggleAdInputs = toggleAdInputs;
+};
 
-function setMainFilter(type) {
+window.setMainFilter = function(type) {
     filters.type = type;
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`tab-${type}`).classList.add('active');
     
     document.getElementById('match-filters').style.display = (type === 'match' || type === 'opponent') ? 'flex' : 'none';
     document.getElementById('player-filters').style.display = type === 'player' ? 'flex' : 'none';
-    applyFilters();
-}
-window.setMainFilter = setMainFilter;
+    window.applyFilters();
+};
 
-function applyFilters() {
+window.applyFilters = function() {
     filters.stadium = document.getElementById('filter-stadium').value;
     filters.position = document.getElementById('filter-pos').value;
     filters.skill = document.getElementById('filter-skill').value;
-    currentPage = 1; renderAds();
-}
-window.applyFilters = applyFilters;
+    currentPage = 1; window.renderAds();
+};
 
-function checkCustomStadium() { document.getElementById('custom-stadium-wrapper').style.display = document.getElementById('stadium-select').value === 'Digər' ? 'block' : 'none'; }
-window.checkCustomStadium = checkCustomStadium;
+window.checkCustomStadium = function() { document.getElementById('custom-stadium-wrapper').style.display = document.getElementById('stadium-select').value === 'Digər' ? 'block' : 'none'; };
 
-function generatePositionInputs() {
+window.generatePositionInputs = function() {
     let count = parseInt(document.getElementById('player-count').value) || 0;
     if (count > 11) count = 11; 
     const container = document.getElementById('dynamic-positions'); container.innerHTML = '';
     for(let i = 0; i < count; i++) container.innerHTML += `<div class="input-wrapper animate-fade"><i class="fa-solid fa-shirt"></i><select class="needed-pos-select"><option value="Fərq etməz">Mövqe seç (${i+1}-ci oyunçu)</option><option value="Hücumçu">Hücumçu</option><option value="Yarımmüdafiəçi">Yarımmüdafiəçi</option><option value="Müdafiəçi">Müdafiəçi</option><option value="Qapıçı">Qapıçı</option></select></div>`;
-}
-window.generatePositionInputs = generatePositionInputs;
+};
 
-// FIREBASE: Elan paylaşmaq
-async function submitAd() {
+window.submitAd = async function() {
     const type = document.querySelector('input[name="adType"]:checked').value;
     
     if(type === 'opponent' && (!currentUser.teamName || currentUser.teamName.trim() === '')) {
@@ -518,34 +496,29 @@ async function submitAd() {
         ads.unshift(newAd); 
         closeModal('createModal');
         currentPage = 1; 
-        renderAds(); 
+        window.renderAds(); 
         showToast("Elan paylaşıldı!");
     } catch (error) {
         showToast("Elan paylaşılarkən xəta baş verdi", "error");
     }
-}
-window.submitAd = submitAd;
+};
 
-// FIREBASE: Elanı silmək
-async function deleteAd(id) { 
+window.deleteAd = async function(id) { 
     if(confirm("Bu elanı silmək istədiyinizə əminsiniz?")) { 
         try {
             await deleteDoc(doc(db, "ads", id.toString()));
             ads = ads.filter(ad => ad.id !== id.toString()); 
             currentPage = 1; 
-            renderAds(); 
+            window.renderAds(); 
             showToast("Elan silindi!", "success"); 
         } catch (error) {
             showToast("Elan silinərkən xəta baş verdi", "error");
         }
     } 
-}
-window.deleteAd = deleteAd;
+};
 
-// (Qalan funksiyalar: shareAdAsImage, showContactInfo, map idarəçiliyi, renderAds, route-lar yerində qalır. Yalnız id yoxlanışını string olaraq düzəltdim)
-
-function shareAdAsImage(id) {
-    const ad = ads.find(a => a.id === id.toString() || a.id === id); // id həm rəqəm, həm string ola bilər
+window.shareAdAsImage = function(id) {
+    const ad = ads.find(a => a.id === id.toString() || a.id === id); 
     if(!ad) return;
 
     showToast("Poster hazırlanır, zəhmət olmasa gözləyin...", "success");
@@ -586,23 +559,20 @@ function shareAdAsImage(id) {
             }
         });
     });
-}
-window.shareAdAsImage = shareAdAsImage;
+};
 
-function showContactInfo(authorName, phone) {
+window.showContactInfo = function(authorName, phone) {
     const cleanPhone = phone ? phone.replace(/[^0-9]/g, '') : '';
     document.getElementById('info-modal-body').innerHTML = `<div style="text-align:center; padding: 20px;"><h3>${authorName}</h3><p style="color: var(--text-muted); margin: 10px 0;">Əlaqə nömrəsi: <br><strong style="color:var(--text-main); font-size:18px;">${phone || 'Yoxdur'}</strong></p><a href="https://wa.me/${cleanPhone}" target="_blank" class="action-btn" style="text-decoration:none; width:100%; margin-top:15px; display:inline-block;"><i class="fa-brands fa-whatsapp"></i> WhatsApp ilə Yaz</a><a href="tel:${phone}" class="login-btn action-btn" style="text-decoration:none; width:100%; margin-top:10px; display:inline-block;"><i class="fa-solid fa-phone"></i> Adi Zəng Et</a></div>`;
     openModal('infoModal');
-}
-window.showContactInfo = showContactInfo;
+};
 
-function toggleMap() {
+window.toggleMap = function() {
     isMapVisible = !isMapVisible;
     document.getElementById('map').style.display = isMapVisible ? 'block' : 'none';
     document.getElementById('map-toggle-btn').innerHTML = isMapVisible ? '<i class="fa-solid fa-list"></i> Siyahını Göstər' : '<i class="fa-solid fa-map-location-dot"></i> Xəritəni Göstər';
     if(isMapVisible) { if(!map) initMap(); else map.invalidateSize(); updateMapMarkers(); }
-}
-window.toggleMap = toggleMap;
+};
 
 function initMap() { map = L.map('map').setView([40.4093, 49.8671], 11); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); }
 
@@ -615,10 +585,9 @@ function updateMapMarkers(fAds) {
     });
 }
 
-function loadMoreAds() { currentPage++; renderAds(true); }
-window.loadMoreAds = loadMoreAds;
+window.loadMoreAds = function() { currentPage++; window.renderAds(true); };
 
-function renderAds(append = false) {
+window.renderAds = function(append = false) {
     const container = document.getElementById('ads-container');
     if(!append) container.innerHTML = '';
 
@@ -682,15 +651,13 @@ function renderAds(append = false) {
     });
 
     document.getElementById('load-more-btn').style.display = fAds.length > endIndex ? 'inline-block' : 'none';
-}
-window.renderAds = renderAds;
+};
 
-function showHome() { hideAllSections(); document.getElementById('home-section').style.display = 'block'; document.getElementById('nav-home').classList.add('active'); }
-function showChampionship() { hideAllSections(); document.getElementById('championship-section').style.display = 'block'; document.getElementById('nav-champ').classList.add('active'); }
-function showTransferMarket() { hideAllSections(); document.getElementById('transfer-section').style.display = 'block'; document.getElementById('nav-transfer').classList.add('active'); renderTransferMarket(); }
-window.showHome = showHome; window.showChampionship = showChampionship; window.showTransferMarket = showTransferMarket;
+window.showHome = function() { hideAllSections(); document.getElementById('home-section').style.display = 'block'; document.getElementById('nav-home').classList.add('active'); };
+window.showChampionship = function() { hideAllSections(); document.getElementById('championship-section').style.display = 'block'; document.getElementById('nav-champ').classList.add('active'); };
+window.showTransferMarket = function() { hideAllSections(); document.getElementById('transfer-section').style.display = 'block'; document.getElementById('nav-transfer').classList.add('active'); window.renderTransferMarket(); };
 
-async function showMyTeam() { 
+window.showMyTeam = async function() { 
     if(!currentUser) { showToast("Bunun üçün əvvəlcə daxil olmalısınız!", "error"); return openModal('loginModal'); }
     hideAllSections(); document.getElementById('team-section').style.display = 'block'; document.getElementById('nav-team').classList.add('active');
     
@@ -699,10 +666,9 @@ async function showMyTeam() {
         await syncUserToDB();
     }
     document.getElementById('team-page-name').innerText = currentUser.teamName || 'Mənim Komandam';
-    populateAddPlayerSelect();
-    renderPitch();
-}
-window.showMyTeam = showMyTeam;
+    window.populateAddPlayerSelect();
+    window.renderPitch();
+};
 
 function hideAllSections() {
     ['home-section', 'championship-section', 'transfer-section', 'team-section'].forEach(id => {
@@ -712,7 +678,7 @@ function hideAllSections() {
     document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
 }
 
-function renderTransferMarket() {
+window.renderTransferMarket = function() {
     const container = document.getElementById('transfer-grid');
     if(!container) return;
     container.innerHTML = '';
@@ -740,8 +706,7 @@ function renderTransferMarket() {
             </div>
         `;
     });
-}
-window.renderTransferMarket = renderTransferMarket;
+};
 
 const formationsCoords = {
     "2-2-1": [ { bottom: '8%', left: '50%' }, { bottom: '30%', left: '30%' }, { bottom: '30%', left: '70%' }, { bottom: '60%', left: '30%' }, { bottom: '60%', left: '70%' }, { bottom: '85%', left: '50%' } ],
@@ -750,7 +715,7 @@ const formationsCoords = {
     "1-3-1": [ { bottom: '8%', left: '50%' }, { bottom: '25%', left: '50%' }, { bottom: '55%', left: '20%' }, { bottom: '50%', left: '50%' }, { bottom: '55%', left: '80%' }, { bottom: '85%', left: '50%' } ]
 };
 
-function renderPitch() {
+window.renderPitch = function() {
     const formationSelect = document.getElementById('formation-select');
     if(!formationSelect) return;
     const formation = formationSelect.value;
@@ -814,10 +779,9 @@ function renderPitch() {
             </div>
         `;
     });
-}
-window.renderPitch = renderPitch;
+};
 
-function renderPlayerSearchResults(searchQuery = '') {
+window.renderPlayerSearchResults = function(searchQuery = '') {
     const container = document.getElementById('player-search-results');
     if(!container) return;
     container.innerHTML = '';
@@ -852,16 +816,14 @@ function renderPlayerSearchResults(searchQuery = '') {
     if(count === 0) {
         container.innerHTML = '<div style="color:var(--text-muted); font-size:12px; text-align:center; padding:10px;">Oyunçu tapılmadı.</div>';
     }
-}
-window.renderPlayerSearchResults = renderPlayerSearchResults;
+};
 
-function filterTeamSearch() {
+window.filterTeamSearch = function() {
     const q = document.getElementById('team-player-search').value;
-    renderPlayerSearchResults(q);
-}
-window.filterTeamSearch = filterTeamSearch;
+    window.renderPlayerSearchResults(q);
+};
 
-function sendTeamInvite(username) {
+window.sendTeamInvite = function(username) {
     if(currentUser.roster.length >= 6) return showToast("Komanda artıq tam doludur (6 nəfər)!", "error");
     
     showToast(`${username} adlı oyunçuya dəvət göndərildi!`, "success");
@@ -870,27 +832,24 @@ function sendTeamInvite(username) {
         if(!currentUser.roster.includes(username) && currentUser.roster.length < 6) {
             currentUser.roster.push(username);
             await syncUserToDB(); 
-            renderPitch(); 
-            filterTeamSearch(); 
+            window.renderPitch(); 
+            window.filterTeamSearch(); 
             showToast(`${username} dəvəti qəbul etdi və kadroya qatıldı!`, "success");
         }
     }, 1500);
-}
-window.sendTeamInvite = sendTeamInvite;
+};
 
-async function removePlayerFromRoster(username) {
+window.removePlayerFromRoster = async function(username) {
     currentUser.roster = currentUser.roster.filter(name => name !== username);
     await syncUserToDB();
-    renderPitch();
-    filterTeamSearch(); 
+    window.renderPitch();
+    window.filterTeamSearch(); 
     showToast("Oyunçu çıxarıldı.", "error");
-}
-window.removePlayerFromRoster = removePlayerFromRoster;
+};
 
-function populateAddPlayerSelect() {} // Ehtiyat üçün əlavə etdim, yuxarıda çağırılıb amma daxili görünmür.
-window.populateAddPlayerSelect = populateAddPlayerSelect;
+window.populateAddPlayerSelect = function() {}; 
 
-function applyToChampionshipWithScreenshot() {
+window.applyToChampionshipWithScreenshot = function() {
     if(currentUser.roster.length < 6) {
         if(!confirm("Kadrda boş yerlər var. Yenə də belə müraciət etmək istəyirsiniz?")) return;
     }
@@ -915,34 +874,13 @@ function applyToChampionshipWithScreenshot() {
             window.open(`https://wa.me/994513450705?text=${encodeURIComponent(text)}`, '_blank');
         }, 1500);
     });
-}
-window.applyToChampionshipWithScreenshot = applyToChampionshipWithScreenshot;
-// --- GİZLİ ADMİN PANELİ MƏNTİQİ ---
-
-// Əgər istifadəçi "Onur" və ya "Resuleli"dirsə, Profilin içinə Admin düyməsi əlavə edirik
-const originalOpenProfile = window.openProfile; // Əgər əvvəldən openProfile funksiyan varsa
-window.openProfile = function() {
-    // Əvvəlcə standart profili açırıq
-    if (originalOpenProfile) originalOpenProfile(); 
-    
-    // Əgər adminlərdən biridirsə, modalın içinə qırmızı düymə əlavə edirik
-    if (currentUser && (currentUser.username.toLowerCase() === 'onur' || currentUser.username.toLowerCase() === 'resuleli')) {
-        const modalContent = document.querySelector('#publicCardModal .modal-content') || document.querySelector('#profileModal .modal-content');
-        if (modalContent && !document.getElementById('admin-panel-btn')) {
-            modalContent.innerHTML += `
-                <button id="admin-panel-btn" class="action-btn" style="background: var(--danger); color: white; width: 100%; margin-top: 15px; border:none;" onclick="openAdminPanel()">
-                    <i class="fa-solid fa-user-shield"></i> Admin Paneli
-                </button>
-            `;
-        }
-    }
 };
 
 window.openAdminPanel = function() {
-    closeModal('publicCardModal'); // Profil modalını bağla
+    closeModal('publicCardModal'); 
     closeModal('profileModal');
     openModal('adminModal');
-    loadAdminAds();
+    window.loadAdminAds();
 };
 
 window.loadAdminAds = function() {
@@ -960,7 +898,7 @@ window.loadAdminAds = function() {
                     <strong style="color:var(--primary);">${ad.author}</strong> - ${ad.type}
                     <div style="font-size:11px; color:var(--text-muted);">${ad.stadium || 'Məkan yoxdur'}</div>
                 </div>
-                <button onclick="deleteAdAsAdmin(${ad.id})" style="background:var(--danger); color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
+                <button onclick="deleteAdAsAdmin('${ad.id}')" style="background:var(--danger); color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
                     <i class="fa-solid fa-trash"></i> Sil
                 </button>
             </div>
@@ -994,8 +932,8 @@ window.deleteAdAsAdmin = async function(adId) {
         await deleteDoc(doc(db, "ads", adId.toString()));
         ads = ads.filter(a => a.id !== adId);
         showToast("Elan bazadan silindi!", "success");
-        loadAdminAds();
-        if (typeof renderAds === "function") renderAds(); // Ana səhifəni də yenilə
+        window.loadAdminAds();
+        window.renderAds(); 
     }
 };
 
@@ -1004,6 +942,6 @@ window.deleteUserAsAdmin = async function(username) {
         await deleteDoc(doc(db, "users", username));
         allUsers = allUsers.filter(u => u.username !== username);
         showToast("İstifadəçi bloklandı və silindi!", "success");
-        loadAdminUsers();
+        window.loadAdminUsers();
     }
 };
