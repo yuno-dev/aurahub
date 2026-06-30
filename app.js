@@ -255,7 +255,40 @@ window.uploadAvatar = async function(event) {
 };
 
 window.updateProfile = async function() {
-    currentUser.username = document.getElementById('edit-username').value;
+    const newUsername = document.getElementById('edit-username').value.trim();
+    const oldUsername = currentUser.username;
+
+    if (!newUsername) return showToast("İstifadəçi adı boş ola bilməz!", "error");
+
+    // 1. ƏGƏR İSTİFADƏÇİ ADINI DƏYİŞİRSƏ
+    if (newUsername !== oldUsername) {
+        // Yoxlayaq bəlkə bu ad artıq kimdəsə var?
+        const exists = allUsers.find(u => u.username === newUsername);
+        if (exists) return showToast("Bu istifadəçi adı artıq məşğuldur!", "error");
+
+        // Köhnə profili bazadan silirik
+        try {
+            await deleteDoc(doc(db, "users", oldUsername));
+        } catch(e) { console.error("Köhnə profil silinərkən xəta:", e); }
+        
+        // Yerli massivdən (allUsers) köhnə hesabı silirik
+        allUsers = allUsers.filter(u => u.username !== oldUsername);
+        
+        // Yeni adı təyin edirik
+        currentUser.username = newUsername;
+        localStorage.setItem('aurahub_logged_in_user', newUsername); // Yaddaşda da yeniləyirik
+        
+        // Əgər istifadəçinin aktiv elanları varsa, onlardakı köhnə adını da avtomatik yeniləyirik
+        ads.forEach(async ad => {
+            if(ad.author === oldUsername) {
+                ad.author = newUsername;
+                if (ad.teamName === oldUsername) ad.teamName = newUsername;
+                await setDoc(doc(db, "ads", ad.id), ad);
+            }
+        });
+    }
+
+    // 2. QALAN MƏLUMATLARI YENİLƏYİRİK
     currentUser.teamName = document.getElementById('edit-team').value;
     currentUser.age = document.getElementById('edit-age').value;
     currentUser.position = document.getElementById('edit-position').value;
@@ -264,7 +297,11 @@ window.updateProfile = async function() {
     
     await syncUserToDB(); 
     
-    closeModal('profileModal'); updateNav(); renderTopPlayers(); showToast("Profil yeniləndi!");
+    closeModal('profileModal'); 
+    updateNav(); 
+    window.renderTopPlayers(); 
+    if (typeof renderAds === "function") window.renderAds(); // Elanlar da yeni adla görünsün
+    showToast("Profil yeniləndi!");
 };
 
 window.logout = function() { 
