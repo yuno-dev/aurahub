@@ -1,8 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { 
-    getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+import { getFirestore, doc, setDoc, getDocs, collection, deleteDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 const firebaseConfig = {
     apiKey: "AIzaSyCZrOBjlyl9opYDeu8uy5v01BQ-MvX_ZWc",
     authDomain: "aurahub-c97bd.firebaseapp.com",
@@ -911,3 +908,93 @@ function applyToChampionshipWithScreenshot() {
     });
 }
 window.applyToChampionshipWithScreenshot = applyToChampionshipWithScreenshot;
+// --- GİZLİ ADMİN PANELİ MƏNTİQİ ---
+
+// Əgər istifadəçi "Onur" və ya "Resuleli"dirsə, Profilin içinə Admin düyməsi əlavə edirik
+const originalOpenProfile = window.openProfile; // Əgər əvvəldən openProfile funksiyan varsa
+window.openProfile = function() {
+    // Əvvəlcə standart profili açırıq
+    if (originalOpenProfile) originalOpenProfile(); 
+    
+    // Əgər adminlərdən biridirsə, modalın içinə qırmızı düymə əlavə edirik
+    if (currentUser && (currentUser.username.toLowerCase() === 'onur' || currentUser.username.toLowerCase() === 'resuleli')) {
+        const modalContent = document.querySelector('#publicCardModal .modal-content') || document.querySelector('#profileModal .modal-content');
+        if (modalContent && !document.getElementById('admin-panel-btn')) {
+            modalContent.innerHTML += `
+                <button id="admin-panel-btn" class="action-btn" style="background: var(--danger); color: white; width: 100%; margin-top: 15px; border:none;" onclick="openAdminPanel()">
+                    <i class="fa-solid fa-user-shield"></i> Admin Paneli
+                </button>
+            `;
+        }
+    }
+};
+
+window.openAdminPanel = function() {
+    closeModal('publicCardModal'); // Profil modalını bağla
+    closeModal('profileModal');
+    openModal('adminModal');
+    loadAdminAds();
+};
+
+window.loadAdminAds = function() {
+    document.getElementById('admin-tab-ads').classList.add('active');
+    document.getElementById('admin-tab-users').classList.remove('active');
+    const container = document.getElementById('admin-content-area');
+    container.innerHTML = '';
+
+    if (ads.length === 0) return container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Heç bir elan yoxdur.</p>';
+
+    ads.forEach(ad => {
+        container.innerHTML += `
+            <div class="mini-ad-box" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div>
+                    <strong style="color:var(--primary);">${ad.author}</strong> - ${ad.type}
+                    <div style="font-size:11px; color:var(--text-muted);">${ad.stadium || 'Məkan yoxdur'}</div>
+                </div>
+                <button onclick="deleteAdAsAdmin(${ad.id})" style="background:var(--danger); color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
+                    <i class="fa-solid fa-trash"></i> Sil
+                </button>
+            </div>
+        `;
+    });
+};
+
+window.loadAdminUsers = function() {
+    document.getElementById('admin-tab-users').classList.add('active');
+    document.getElementById('admin-tab-ads').classList.remove('active');
+    const container = document.getElementById('admin-content-area');
+    container.innerHTML = '';
+
+    allUsers.forEach(u => {
+        container.innerHTML += `
+            <div class="mini-ad-box" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <img src="${u.avatar}" style="width:30px; height:30px; border-radius:50%;">
+                    <div><strong>${u.username}</strong><br><span style="font-size:10px; color:var(--text-muted);">${u.position}</span></div>
+                </div>
+                ${u.username.toLowerCase() !== 'onur' ? 
+                `<button onclick="deleteUserAsAdmin('${u.username}')" style="background:var(--danger); color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Ban</button>` 
+                : '<span style="font-size:10px; color:var(--primary);">Qurucu</span>'}
+            </div>
+        `;
+    });
+};
+
+window.deleteAdAsAdmin = async function(adId) {
+    if (confirm("Bu elanı silmək istədiyinizə əminsiniz?")) {
+        await deleteDoc(doc(db, "ads", adId.toString()));
+        ads = ads.filter(a => a.id !== adId);
+        showToast("Elan bazadan silindi!", "success");
+        loadAdminAds();
+        if (typeof renderAds === "function") renderAds(); // Ana səhifəni də yenilə
+    }
+};
+
+window.deleteUserAsAdmin = async function(username) {
+    if (confirm(`DİQQƏT: ${username} adlı istifadəçini həmişəlik silmək istəyirsiniz?`)) {
+        await deleteDoc(doc(db, "users", username));
+        allUsers = allUsers.filter(u => u.username !== username);
+        showToast("İstifadəçi bloklandı və silindi!", "success");
+        loadAdminUsers();
+    }
+};
