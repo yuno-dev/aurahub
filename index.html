@@ -303,7 +303,22 @@
                     class="fa-solid fa-arrow-right"></i></button>
         </div>
     </div>
+<div id="adminModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="closeModal('adminModal')">&times;</span>
+            <h2 style="color: var(--danger); margin-bottom: 15px;"><i class="fa-solid fa-user-shield"></i> İdarəetmə Paneli</h2>
+            
+            <div class="modern-filters" style="padding: 10px; margin-bottom: 15px;">
+                <div class="filter-tabs" style="border:none; margin:0; padding:0; justify-content: center;">
+                    <button class="tab-btn active" id="admin-tab-ads" onclick="loadAdminAds()">Bütün Elanlar</button>
+                    <button class="tab-btn" id="admin-tab-users" onclick="loadAdminUsers()">İstifadəçilər</button>
+                </div>
+            </div>
 
+            <div id="admin-content-area" style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
+                </div>
+        </div>
+    </div>
     <div id="profileModal" class="modal">
         <div class="modal-content profile-modal-content"><span class="close" onclick="closeModal('profileModal')"
                 style="z-index: 10;">&times;</span>
