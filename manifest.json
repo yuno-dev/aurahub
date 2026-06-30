@@ -1,0 +1,21 @@
+{
+  "name": "Aurahub",
+  "short_name": "Aurahub",
+  "description": "Futbol oyunları üçün komanda və rəqib tap.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#141414",
+  "theme_color": "#caff04",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/847/847969.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
