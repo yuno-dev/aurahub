@@ -88,16 +88,25 @@ function showToast(message, type = 'success') {
 }
 window.showToast = showToast;
 
-function updateNav() {
+window.updateNav = function() {
     const nav = document.getElementById('nav-actions');
+    if (!nav) return; // Əgər nav tapılmazsa, xəta verməsin
+
     if (currentUser) {
-        nav.innerHTML = `<button class="action-btn login-btn" onclick="openProfile()"><i class="fa-solid fa-user-astronaut"></i> ${currentUser.username}</button>`;
-        updateNotificationBadge();
+        let adminBtn = '';
+        // Əgər istifadəçi Onur və ya Resulelidirsə, xüsusi Qırmızı Admin düyməsi yaradırıq
+        if (currentUser.username.toLowerCase() === 'onur' || currentUser.username.toLowerCase() === 'resuleli') {
+            adminBtn = `<button class="action-btn" style="background: var(--danger); color: white; margin-right: 10px; border:none; box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);" onclick="openAdminPanel()">
+                            <i class="fa-solid fa-user-shield"></i> Admin
+                        </button>`;
+        }
+        
+        // Həm admin düyməsini (əgər varsa), həm də istifadəçinin adını ekrana basırıq
+        nav.innerHTML = `${adminBtn} <button class="action-btn" onclick="openProfile()"><i class="fa-solid fa-user"></i> ${currentUser.username}</button>`;
     } else {
-        nav.innerHTML = `<button class="action-btn login-btn" onclick="openModal('loginModal')">Daxil Ol</button>`;
-        document.getElementById('notif-badge').style.display = 'none';
+        nav.innerHTML = `<button class="action-btn" onclick="openModal('loginModal')">Daxil Ol</button>`;
     }
-}
+};
 window.updateNav = updateNav;
 
 function requireAuth(actionCallback) {
