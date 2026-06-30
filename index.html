@@ -1,181 +1,535 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
     <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aurahub - Futbol Ekosistemi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <header>
         <div class="nav-container">
             <div class="logo"><i class="fa-solid fa-futbol"></i> AURA<span>HUB</span></div>
-            <nav class="nav-links">
-                <a href="#" class="active">Ana Səhifə</a>
-                <a href="#ads-section">Elanlar</a>
-                <a href="#footer">Haqqımızda</a>
+           <nav class="nav-links">
+                <a href="#" id="nav-home" class="active" onclick="showHome()">Ana Səhifə</a>
+                <a href="#ads-section" onclick="showHome()">Elanlar</a>
+<a href="#" id="nav-team" onclick="showMyTeam()">Komandam <i class="fa-solid fa-shield"></i></a>
+                <a href="#" id="nav-champ" onclick="showChampionship()">Çempionat <span style="background:var(--primary); color:#000; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:bold; margin-left:5px;">YENİ</span></a>
+                          <a href="#" id="nav-transfer" onclick="showTransferMarket()">Transfer Bazarı <i class="fa-solid fa-magnifying-glass"></i></a>
             </nav>
-            <div id="nav-actions">
+
+
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <div class="notification-wrapper" onclick="requireAuth(openNotifications)">
+                    <i class="fa-solid fa-bell" style="font-size: 20px; cursor: pointer; color: var(--text-muted);"></i>
+                    <span id="notif-badge" class="badge-count" style="display: none;">0</span>
                 </div>
+                <button id="theme-toggle" class="icon-btn" onclick="toggleTheme()"><i
+                        class="fa-solid fa-sun"></i></button>
+                <div id="nav-actions"></div>
+            </div>
         </div>
     </header>
 
     <main>
-        
-        <div class="hero-section">
-            <h1>Meydanda Yerin Hazırdır.</h1>
-            <p>Futbol oynamaq üçün komanda tap və ya çatışmayan oyunçunu axtar. Hər şey bir toxunuşla.</p>
-            <button class="action-btn create-btn" onclick="requireAuth(openCreateModal)">
-                <i class="fa-solid fa-plus"></i> Yeni Elan Yarat
-            </button>
-        </div>
-
-        <div id="ads-section" class="feed-section">
-            <div class="feed-header">
-                <h3 class="section-title">Aktiv Elanlar</h3>
-                <div class="filter-group">
-                    <button class="filter-btn active" onclick="filterAds('all')">Hamısı</button>
-                    <button class="filter-btn" onclick="filterAds('match')">Oyunçu Axtaranlar</button>
-                    <button class="filter-btn" onclick="filterAds('player')">Oyun Axtaranlar</button>
+        <div id="home-section" class="animate-fade">
+<div class="hero-section">
+                <h1>Meydanda Yerin Hazırdır.</h1>
+                <p>Futbol oynamaq üçün komanda tap və ya çatışmayan oyunçunu axtar. Hər şey bir toxunuşla.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button class="action-btn create-btn" onclick="requireAuth(openCreateModal)">
+                        <i class="fa-solid fa-plus"></i> Yeni Elan Yarat
+                    </button>
+                    <button class="action-btn" style="background: transparent; border: 1px solid #25D366; color: #25D366;" onclick="openModal('cameramanModal')">
+                        <i class="fa-solid fa-video"></i> Kameraman Sifarişi
+                    </button>
                 </div>
             </div>
-            
-            <div id="ads-container" class="ads-grid">
+
+            <section class="top-players-section">
+                <h3 class="section-title"><i class="fa-solid fa-fire" style="color:var(--primary);"></i> Həftənin Ən
+                    Aktivləri</h3>
+                <div id="top-players-container" class="top-players-grid"></div>
+            </section>
+
+            <div id="ads-section" class="feed-section">
+                <div class="feed-header">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px;">
+                        <h3 class="section-title">Aktiv Elanlar</h3>
+                        <button class="action-btn" onclick="toggleMap()" id="map-toggle-btn"
+                            style="padding: 8px 15px; font-size: 13px;">
+                            <i class="fa-solid fa-map-location-dot"></i> Xəritəni Göstər
+                        </button>
+                    </div>
+
+                    <div class="modern-filters">
+                        <div class="filter-tabs">
+                            <button class="tab-btn active" id="tab-all" onclick="setMainFilter('all')">Hamısı</button>
+                            <button class="tab-btn" id="tab-match" onclick="setMainFilter('match')">Oyunçu
+                                Axtaranlar</button>
+                            <button class="tab-btn" id="tab-opponent" onclick="setMainFilter('opponent')">Rəqib
+                                Axtaranlar</button>
+                            <button class="tab-btn" id="tab-player" onclick="setMainFilter('player')">Oyun
+                                Axtaranlar</button>
+                        </div>
+
+                        <div id="match-filters" class="sub-filters" style="display: none;">
+                            <div class="filter-item"><i class="fa-solid fa-location-dot"></i><select id="filter-stadium"
+                                    onchange="applyFilters()">
+                                    <option value="all">Bütün Stadionlar</option>
+                                    <option value="Ruslan93 Stadionu">Ruslan93 Stadionu</option>
+                                    <option value="Amasiya Stadionu">Amasiya Stadionu</option>
+                                    <option value="Binəqədi">Binəqədi Azfar</option>
+                                    <option value="Nərimanov">Nərimanov Azfar</option>
+                                    <option value="Nəsimi">Nəsimi Azfar</option>
+                                    <option value="Yasamal Sportster">Yasamal Sportster</option>
+                                </select></div>
+                        </div>
+                        <div id="player-filters" class="sub-filters" style="display: none;">
+                            <div class="filter-item"><i class="fa-solid fa-shoe-prints"></i><select id="filter-pos"
+                                    onchange="applyFilters()">
+                                    <option value="all">Bütün Mövqelər</option>
+                                    <option value="Hücumçu">Hücumçu</option>
+                                    <option value="Yarımmüdafiəçi">Yarımmüdafiəçi</option>
+                                    <option value="Müdafiəçi">Müdafiəçi</option>
+                                    <option value="Qapıçı">Qapıçı</option>
+                                </select></div>
+                            <div class="filter-item"><i class="fa-solid fa-star"></i><select id="filter-skill"
+                                    onchange="applyFilters()">
+                                    <option value="all">Bütün Səviyyələr</option>
+                                    <option value="Başlanğıc">Başlanğıc</option>
+                                    <option value="Orta">Orta</option>
+                                    <option value="Güclü">Güclü</option>
+                                    <option value="Professional">Professional</option>
+                                </select></div>
+                        </div>
+                    </div>
                 </div>
+
+                <div id="map" class="map-container" style="display: none;"></div>
+                <div id="ads-container" class="ads-grid"></div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button id="load-more-btn" class="login-btn action-btn" style="display: none;"
+                        onclick="loadMoreAds()"><i class="fa-solid fa-angles-down"></i> Daha Çox Göstər</button>
+                </div>
+            </div>
+        </div>
+<!-- ================= YENİ: TRANSFER BAZARI BÖLMƏSİ ================= -->
+        <div id="transfer-section" style="display: none;" class="animate-fade">
+            <div class="feed-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px;">
+                    <h3 class="section-title"><i class="fa-solid fa-magnifying-glass-chart" style="color:var(--primary);"></i> Transfer Bazarı (Scouting)</h3>
+                </div>
+                <div class="modern-filters">
+                    <div class="sub-filters" style="display: flex;">
+                        <div class="filter-item">
+                            <i class="fa-solid fa-shoe-prints"></i>
+                            <select id="transfer-pos-filter" onchange="renderTransferMarket()">
+                                <option value="all">Bütün Mövqelər</option>
+                                <option value="Hücumçu">Hücumçu</option>
+                                <option value="Yarımmüdafiəçi">Yarımmüdafiəçi</option>
+                                <option value="Müdafiəçi">Müdafiəçi</option>
+                                <option value="Qapıçı">Qapıçı</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="transfer-grid" class="ads-grid">
+                <!-- Oyunçular bura JS ilə düşəcək -->
+            </div>
+        </div>
+        <div id="team-section" style="display: none;" class="animate-fade">
+            <div class="feed-header" style="text-align: center;">
+                <h2 style="font-size: 28px; font-weight: 800; margin-bottom: 10px;">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--primary);"></i> <span id="team-page-name">Mənim Komandam</span>
+                </h2>
+                <p style="color: var(--text-muted); font-size: 14px;">Komandanızı yığın, taktikanı seçin və Çempionata müraciət edin!</p>
+                
+                <div style="margin-top: 20px; display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 12px; border: 1px solid var(--border-color);">
+                    <i class="fa-solid fa-chess-board" style="color: var(--primary);"></i>
+                    <strong>Düzülüş:</strong>
+                    <select id="formation-select" onchange="renderPitch()" style="background: transparent; border: none; color: white; font-weight: bold; outline: none; cursor: pointer; font-size: 16px;">
+                        <option value="2-2-1">2-2-1 (Balanslı)</option>
+                        <option value="2-1-2">2-1-2 (Hücum)</option>
+                        <option value="3-1-1">3-1-1 (Müdafiə)</option>
+                        <option value="1-3-1">1-3-1 (Topa Sahib Olma)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="team-builder-container">
+                <div class="pitch-wrapper" id="pitch-capture-area">
+                    <div class="football-pitch">
+                        <div class="pitch-lines"></div>
+                        <div class="penalty-box top"></div>
+                        <div class="penalty-box bottom"></div>
+                        <div class="center-circle"></div>
+                        <div class="center-line"></div>
+                        
+                        <div id="pitch-players-container"></div>
+                    </div>
+                </div>
+                
+                <div class="roster-panel">
+                    <h3 style="margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                        Kadrom (Maks 6)
+                    </h3>
+                    <div id="roster-list" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                        </div>
+                    
+<!-- YENİLƏNMİŞ AXTARIŞ VƏ DƏVƏT PANELİ -->
+<!-- YENİLƏNMİŞ CANLI AXTARIŞ VƏ DƏVƏT PANELİ -->
+                    <div style="margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <h4 style="margin-bottom: 10px; font-size: 14px;"><i class="fa-solid fa-magnifying-glass"></i> Oyunçu Axtar</h4>
+                        
+                        <input type="text" id="team-player-search" placeholder="Oyunçunun adını yazın..." oninput="filterTeamSearch()" style="width: 100%; padding: 10px; border-radius: 8px; background: var(--bg-main); color: #fff; border: 1px solid var(--border-color); margin-bottom: 10px; outline: none;">
+                        
+                        <!-- YENİ: Axtarış nəticələrinin dərhal görünəcəyi qutu -->
+                        <div id="player-search-results" style="display: flex; flex-direction: column; gap: 8px; max-height: 160px; overflow-y: auto; padding-right: 5px;">
+                            <div style="color:var(--text-muted); font-size:12px; text-align:center; padding:10px;">Axtarış üçün ad yazın...</div>
+                        </div>
+                    </div>
+
+                    <button class="action-btn submit-btn" style="width: 100%; background: #25D366; color: white; border: none; padding: 15px; font-size: 16px; border-radius: 12px; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);" onclick="applyToChampionshipWithScreenshot()">
+                        <i class="fa-solid fa-trophy"></i> Çempionata Müraciət Et
+                    </button>
+                    <p style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 10px;">
+                        Düyməyə basdıqda dizilişin şəkli avtomatik yüklənəcək və WhatsApp açılacaq.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div id="championship-section" style="display: none;" class="animate-fade">
+
+            <div class="champ-hero">
+                <div class="champ-badge"><i class="fa-solid fa-circle-dot"
+                        style="color:red; animation: blink 1s infinite;"></i> QEYDİYYAT AÇIQDIR</div>
+                <h1>AURAHUB KUBOKU 🏆</h1>
+                <p>16 komanda, 1 çempion. Öz komandanı yığ, meydana çıx və böyük mükafatı qazan! Hazırda komandaların
+                    yığılma prosesi gedir.</p>
+                <div class="champ-prize">
+                    <span>MÜKAFAT FONDU</span>
+                    <h2>500 AZN</h2>
+                </div>
+            </div>
+
+            <div class="champ-info-grid">
+                <div class="champ-card">
+                    <i class="fa-solid fa-people-group"></i>
+                    <h4>Format</h4>
+                    <p>16 komanda (6 nəfərlik format)</p>
+                </div>
+                <div class="champ-card">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <h4>Məkan & Vaxt</h4>
+                    <p>Amasiya Stadionu (Q. Qarayev)<br>1 həftə, hər gün 2 oyun (1 saat)</p>
+                </div>
+                <div class="champ-card">
+                    <i class="fa-solid fa-ticket"></i>
+                    <h4>İştirak Haqqı</h4>
+                    <p>Komanda üçün <b>60 AZN</b><br><span style="font-size:12px; color:var(--text-muted);">(Nəfərbaşı
+                            ~10 AZN)</span></p>
+                </div>
+            </div>
+
+            <div class="champ-registration">
+                <h3><i class="fa-solid fa-pen-to-square"></i> Turnirə Qeydiyyat</h3>
+                <p>Turnirdə iştirak etmək və komandanızı siyahıya salmaq üçün aşağıdakı nömrələrdən biri ilə WhatsApp
+                    üzərindən əlaqə saxlayın:</p>
+                <div class="champ-contacts">
+                    <a href="https://wa.me/994513450705?text=Salam,%20Aurahub%20çempionatına%20komandamla%20qatılmaq%20istəyirəm."
+                        target="_blank" class="action-btn contact-btn"
+                        style="background: #25D366; color: white; border: none;">
+                        <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> Onur (051-345-07-05)
+                    </a>
+                    <a href="https://wa.me/994777633777?text=Salam,%20Aurahub%20çempionatına%20komandamla%20qatılmaq%20istəyirəm."
+                        target="_blank" class="action-btn contact-btn"
+                        style="background: #25D366; color: white; border: none;">
+                        <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> Rəsuləli (077-763-37-77)
+                    </a>
+                </div>
+            </div>
         </div>
     </main>
 
-    <footer id="footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <h3>AURA<span>HUB</span></h3>
-                <p>Dünyanın (hələlik Bakının) #1 nömrəli futbol şəbəkəsi.</p>
+    <footer id="footer" class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand-section">
+                    <h2 class="footer-logo"><i class="fa-solid fa-futbol"></i> AURA<span>HUB</span></h2>
+                    <p class="footer-mission">
+                        <strong>Aurahub oyun təşkil etmir.</strong> Biz sadəcə əvvəlcədən vaxtı və stadionu bəlli olan
+                        oyunlara çatışmayan oyunçuları, və ya komanda axtaran gəncləri birləşdirən rəqəmsal futbol
+                        ekosistemiyik.
+                    </p>
+                </div>
             </div>
-            <div class="footer-links">
-                <h4>Menyu</h4>
-                <a href="#">Ana Səhifə</a>
-                <a href="#">Qaydalar</a>
-                <a href="#">Məxfilik Siyasəti</a>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Aurahub. Bütün hüquqlar qorunur.</p>
             </div>
-            <div class="footer-social">
-                <h4>Bizi İzləyin</h4>
-                <a href="#"><i class="fa-brands fa-instagram"></i> Instagram</a>
-                <a href="#"><i class="fa-brands fa-telegram"></i> Telegram</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Aurahub. Bütün hüquqlar qorunur.</p>
         </div>
     </footer>
 
     <div id="toast-container"></div>
 
     <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+        <div class="modal-content"><span class="close" onclick="closeModal('loginModal')">&times;</span>
             <h2><i class="fa-solid fa-right-to-bracket"></i> Sistemə Daxil Ol</h2>
-            <p class="modal-subtitle">Davam etmək üçün profil yarat.</p>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" id="username" placeholder="Ad, Soyad">
-            </div>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-calendar-days"></i>
-                <input type="number" id="age" placeholder="Yaş">
-            </div>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-shoe-prints"></i>
-                <select id="position">
+            <div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" id="username"
+                    placeholder="Ad, Soyad"></div>
+            <div class="input-wrapper"><i class="fa-solid fa-calendar-days"></i><input type="number" id="age"
+                    placeholder="Yaş"></div>
+            <div class="input-wrapper"><i class="fa-solid fa-shoe-prints"></i><select id="position">
                     <option value="Hücumçu">Hücumçu</option>
                     <option value="Yarımmüdafiəçi">Yarımmüdafiəçi</option>
                     <option value="Müdafiəçi">Müdafiəçi</option>
                     <option value="Qapıçı">Qapıçı</option>
-                </select>
-            </div>
-            <button class="action-btn submit-btn" onclick="login()">Giriş Et <i class="fa-solid fa-arrow-right"></i></button>
+                </select></div><button class="action-btn submit-btn" onclick="login()">Giriş Et <i
+                    class="fa-solid fa-arrow-right"></i></button>
         </div>
     </div>
 
     <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('profileModal')">&times;</span>
-            <h2><i class="fa-solid fa-id-card"></i> Profilim</h2>
-            <div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" id="edit-username"></div>
-            <div class="input-wrapper"><i class="fa-solid fa-calendar-days"></i><input type="number" id="edit-age"></div>
-            <div class="input-wrapper">
-                <i class="fa-solid fa-shoe-prints"></i>
-                <select id="edit-position">
-                    <option value="Hücumçu">Hücumçu</option>
-                    <option value="Yarımmüdafiəçi">Yarımmüdafiəçi</option>
-                    <option value="Müdafiəçi">Müdafiəçi</option>
-                    <option value="Qapıçı">Qapıçı</option>
-                </select>
+        <div class="modal-content profile-modal-content"><span class="close" onclick="closeModal('profileModal')"
+                style="z-index: 10;">&times;</span>
+            <div class="profile-tabs"><button class="profile-tab-btn active" onclick="switchProfileTab('card', this)"><i
+                        class="fa-solid fa-id-badge"></i> Kartım</button><button class="profile-tab-btn"
+                    onclick="switchProfileTab('edit', this)"><i class="fa-solid fa-user-pen"></i> Ayarlar</button></div>
+            <div id="tab-card" class="profile-tab-content active-tab">
+                <div class="premium-player-card" id="premium-card-bg">
+                    <div class="card-header-bg"></div>
+                    <div id="pro-badge" class="pro-badge" style="display: none;"><i
+                            class="fa-solid fa-circle-check"></i> PRO OYUNÇU</div><label for="avatar-upload"
+                        class="avatar-upload-label"><img id="card-avatar"
+                            src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Avatar">
+                        <div class="avatar-hover"><i class="fa-solid fa-camera"></i></div>
+                    </label><input type="file" id="avatar-upload" style="display: none;" accept="image/*"
+                        onchange="uploadAvatar(event)">
+                    <h3 id="card-name" class="premium-name">Ad Soyad</h3>
+                    <div id="card-team"
+                        style="font-size:14px; color:var(--primary); margin-top:-15px; margin-bottom:15px; font-weight:600; display:none;">
+                        <i class="fa-solid fa-shield-halved"></i> <span id="card-team-name">Komanda</span></div>
+                    <div class="premium-stats" style="margin-bottom: 10px;">
+                        <div class="stat-box"><i class="fa-solid fa-shoe-prints"></i><span
+                                class="stat-label">Mövqe</span><strong id="card-pos">Hücumçu</strong></div>
+                        <div class="stat-box divider"></div>
+                        <div class="stat-box"><i class="fa-solid fa-calendar"></i><span
+                                class="stat-label">Yaş</span><strong id="card-age">24</strong></div>
+                        <div class="stat-box divider"></div>
+                        <div class="stat-box"><i class="fa-solid fa-star"></i><span class="stat-label">Güc</span><strong
+                                id="card-skill">Orta</strong></div>
+                    </div>
+                    <div class="trust-stats">
+                        <div class="trust-item"><span>Qəbul olunduğu oyun</span><strong id="card-accepted">0</strong>
+                        </div>
+                        <div class="trust-item"><span>İştirak etdiyi oyun</span><strong id="card-attended">0</strong>
+                        </div>
+                        <div class="trust-bar-bg">
+                            <div class="trust-bar-fill" id="card-trust-fill" style="width: 0%;"></div>
+                        </div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 5px; text-align: right;">
+                            Etibarlılıq: <strong id="card-trust-percent">0%</strong></div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;"><button class="action-btn contact-btn"
+                        style="width: 100%; background: #25D366; color: white; border:none;"
+                        onclick="verifyProStatus()"><i class="fa-brands fa-whatsapp"></i> Akademiya/Pro Statusu
+                        Al</button><button class="danger-btn logout-btn-modern" onclick="logout()"><i
+                            class="fa-solid fa-power-off"></i> Hesabdan Çıx</button></div>
             </div>
-<!-- Profil Modalına bunları əlavə et -->
-<div class="input-wrapper">
-    <i class="fa-solid fa-phone"></i>
-    <input type="text" id="edit-phone" placeholder="Əlaqə nömrəsi">
-</div>
-<div class="input-wrapper">
-    <i class="fa-solid fa-trophy"></i>
-    <select id="edit-skill">
-        <option value="Başlanğıc">Başlanğıc</option>
-        <option value="Orta">Orta</option>
-        <option value="Güclü">Güclü</option>
-        <option value="Professional">Professional</option>
-    </select>
-</div>
-            <button class="action-btn submit-btn" onclick="updateProfile()">Yadda Saxla</button>
-            <button class="danger-btn" onclick="logout()">Hesabdan Çıx</button>
+            <div id="tab-edit" class="profile-tab-content" style="display:none;">
+                <div class="edit-grid">
+                    <div class="input-wrapper full-width"><i class="fa-solid fa-user"></i><input type="text"
+                            id="edit-username" placeholder="Ad, Soyad"></div>
+                    <div class="input-wrapper full-width"><i class="fa-solid fa-shield-halved"></i><input type="text"
+                            id="edit-team" placeholder="Komandanızın Adı (İstəyə bağlı)"></div>
+                    <div class="input-wrapper"><i class="fa-solid fa-calendar-days"></i><input type="number"
+                            id="edit-age" placeholder="Yaş"></div>
+                    <div class="input-wrapper"><i class="fa-solid fa-shoe-prints"></i><select id="edit-position">
+                            <option value="Hücumçu">Hücumçu</option>
+                            <option value="Yarımmüdafiəçi">Yarımmüdafiəçi</option>
+                            <option value="Müdafiəçi">Müdafiəçi</option>
+                            <option value="Qapıçı">Qapıçı</option>
+                        </select></div>
+                    <div class="input-wrapper"><i class="fa-solid fa-trophy"></i><select id="edit-skill">
+                            <option value="Başlanğıc">Başlanğıc</option>
+                            <option value="Orta">Orta</option>
+                            <option value="Güclü">Güclü</option>
+                            <option value="Professional">Professional</option>
+                        </select></div>
+                    <div class="input-wrapper full-width"><i class="fa-solid fa-phone"></i><input type="text"
+                            id="edit-phone" placeholder="Əlaqə nömrəsi"></div>
+                </div><button class="action-btn submit-btn" onclick="updateProfile()">Yadda Saxla <i
+                        class="fa-solid fa-check"></i></button>
+            </div>
         </div>
     </div>
 
-<!-- BURA SENIN ELA YARATMA MODALINDIR -->
-<div id="createModal" class="modal">
-    <div class="modal-content create-modal-content">
-        <span class="close" onclick="closeModal('createModal')">&times;</span>
-        <h2><i class="fa-solid fa-bullhorn"></i> Elan Yarat</h2>
-        
-        <div class="ad-type-selector">
-            <input type="radio" id="type-match" name="adType" value="match" checked onchange="toggleAdInputs()">
-            <label for="type-match"><i class="fa-solid fa-users"></i> Oyunçu Axtarıram</label>
-            
-            <input type="radio" id="type-player" name="adType" value="player" onchange="toggleAdInputs()">
-            <label for="type-player"><i class="fa-solid fa-person-running"></i> Oyun Axtarıram</label>
+    <div id="publicCardModal" class="modal">
+        <div class="modal-content profile-modal-content"
+            style="background: transparent; border: none; box-shadow: none; align-items: center;">
+            <div class="premium-player-card" id="public-premium-card-bg"
+                style="margin-top: 20px; width: 100%; max-width: 380px;"><span class="close"
+                    onclick="closeModal('publicCardModal')"
+                    style="position: absolute; top: 15px; right: 15px; z-index: 10; color: #fff; background: rgba(0,0,0,0.5); border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; cursor: pointer;">&times;</span>
+                <div class="card-header-bg"></div>
+                <div id="public-pro-badge" class="pro-badge" style="display: none;"><i
+                        class="fa-solid fa-circle-check"></i> PRO OYUNÇU</div>
+                <div style="position: relative; z-index: 1; margin-bottom: 15px; margin-top: 10px;"><img
+                        id="public-card-avatar" src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Avatar"
+                        style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-card); box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                </div>
+                <h3 id="public-card-name" class="premium-name" style="font-size: 24px;">Ad Soyad</h3>
+                <div id="public-card-team"
+                    style="font-size:14px; color:var(--primary); margin-top:-15px; margin-bottom:15px; font-weight:600; display:none;">
+                    <i class="fa-solid fa-shield-halved"></i> <span id="public-card-team-name">Komanda</span></div>
+                <div class="premium-stats" style="margin-bottom: 15px;">
+                    <div class="stat-box"><i class="fa-solid fa-shoe-prints"></i><span
+                            class="stat-label">Mövqe</span><strong id="public-card-pos">Hücumçu</strong></div>
+                    <div class="stat-box divider"></div>
+                    <div class="stat-box"><i class="fa-solid fa-calendar"></i><span class="stat-label">Yaş</span><strong
+                            id="public-card-age">24</strong></div>
+                    <div class="stat-box divider"></div>
+                    <div class="stat-box"><i class="fa-solid fa-star"></i><span class="stat-label">Güc</span><strong
+                            id="public-card-skill">Orta</strong></div>
+                </div>
+                <div class="trust-stats">
+                    <div class="trust-item"><span>Qəbul olunduğu oyun</span><strong id="public-card-accepted">0</strong>
+                    </div>
+                    <div class="trust-item"><span>İştirak etdiyi oyun</span><strong id="public-card-attended">0</strong>
+                    </div>
+                    <div class="trust-bar-bg">
+                        <div class="trust-bar-fill" id="public-card-trust-fill" style="width: 0%;"></div>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 8px; text-align: center;">
+                        Etibarlılıq: <strong id="public-card-trust-percent" style="color:var(--text-main);">0%</strong>
+                    </div>
+                </div>
+                <!-- İSTİFADƏÇİNİN AKTİV ELANLARI BURA DÜŞƏCƏK -->
+                <div id="public-card-ads-container" style="margin-top: 15px; width: 100%; text-align: left;"></div>
+            </div>
         </div>
-        
-        <div id="match-inputs" class="form-section animate-fade">
-            <div class="input-wrapper"><i class="fa-solid fa-location-dot"></i><input type="text" id="stadium" placeholder="Stadion (məs: Azfar)"></div>
-            <div class="input-wrapper"><i class="fa-solid fa-clock"></i><input type="datetime-local" id="time"></div>
-            <div class="input-wrapper"><i class="fa-solid fa-manat-sign"></i><input type="number" id="price" placeholder="Qiymət (AZN)"></div>
-        </div>
-        
-        <div id="player-inputs" class="form-section animate-fade" style="display: none;">
-            <div class="input-wrapper"><i class="fa-solid fa-pen"></i><input type="text" id="note" placeholder="Özün haqqında qeyd (məs: Cümə günü boşam)"></div>
-        </div>
-
-        <button class="action-btn submit-btn" onclick="submitAd()">Elanı Paylaş <i class="fa-solid fa-check"></i></button>
     </div>
-</div>
-<div id="infoModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('infoModal')">&times;</span>
-        <h2><i class="fa-solid fa-user"></i> İstifadəçi Məlumatı</h2>
-        <div id="info-modal-body" style="margin-top: 20px;">
-            <!-- Məlumatlar bura JS ilə gələcək -->
+<!-- KAMERAMAN MODALI -->
+<!-- KAMERAMAN MODALI (Yenilənmiş Mətn) -->
+    <div id="cameramanModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close" onclick="closeModal('cameramanModal')">&times;</span>
+            <div style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"><i class="fa-solid fa-camera-retro"></i></div>
+            <h2>Peşəkar Çəkiliş</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 15px 0; line-height: 1.6;">
+                Oyununuzun xatirə qalması və ən yaxşı anların kameraya düşməsi üçün peşəkar operator sifariş edə bilərsiniz.<br><br>
+                <span style="display:inline-block; background:rgba(202,255,4,0.1); border:1px solid var(--primary); padding:10px; border-radius:8px; color:var(--text-main);">
+                    <i class="fa-solid fa-stopwatch" style="color:var(--primary);"></i> <b>Xüsusi Qeyd:</b> Çəkiliş zamanı <strong>hər qolun dəqiqəsi</strong> və <strong>qolu vuran oyunçu</strong> da video üzərində (və ya protokolda) xüsusi olaraq qeyd olunacaq!
+                </span>
+            </p>
+            <div class="champ-contacts" style="flex-direction: column; gap: 10px; margin-top: 20px;">
+                <a href="https://wa.me/994513450705?text=Salam,%20oyunumuz%20üçün%20kameraman%20sifariş%20etmək%20istəyirik." target="_blank" class="action-btn contact-btn" style="background: #25D366; color: white; border: none; width: 100%;">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> Onur ilə əlaqə
+                </a>
+                <a href="https://wa.me/994777633777?text=Salam,%20oyunumuz%20üçün%20kameraman%20sifariş%20etmək%20istəyirik." target="_blank" class="action-btn contact-btn" style="background: #25D366; color: white; border: none; width: 100%;">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> Rəsuləli ilə əlaqə
+                </a>
+            </div>
         </div>
     </div>
-</div>
-
-            
-           
-
-
+    <div id="notificationsModal" class="modal">
+        <div class="modal-content"><span class="close" onclick="closeModal('notificationsModal')">&times;</span>
+            <h2><i class="fa-solid fa-bell"></i> Bildirişlər</h2>
+            <div id="notifications-list" style="margin-top: 20px; max-height: 300px; overflow-y: auto;"></div>
+        </div>
     </div>
 
-    <script src="app.js"></script>
+    <div id="createModal" class="modal">
+        <div class="modal-content create-modal-content">
+            <span class="close" onclick="closeModal('createModal')">&times;</span>
+            <h2><i class="fa-solid fa-bullhorn"></i> Elan Yarat</h2>
+            <div class="ad-type-selector"><input type="radio" id="type-match" name="adType" value="match" checked
+                    onchange="toggleAdInputs()"><label for="type-match"><i class="fa-solid fa-users"></i>
+                    Oyunçu</label><input type="radio" id="type-opponent" name="adType" value="opponent"
+                    onchange="toggleAdInputs()"><label for="type-opponent"><i class="fa-solid fa-shield-halved"></i>
+                    Rəqib</label><input type="radio" id="type-player" name="adType" value="player"
+                    onchange="toggleAdInputs()"><label for="type-player"><i class="fa-solid fa-person-running"></i>
+                    Oyun</label></div>
+            <div id="match-inputs" class="form-section animate-fade">
+                <div class="info-alert"><i class="fa-solid fa-circle-info"></i><span><strong>Diqqət:</strong> Saytımız
+                        oyun təşkil etmir. Elan yaratmazdan əvvəl stadion və oyun vaxtını artıq həll etdiyinizdən əmin
+                        olun.</span></div>
+                <div class="input-wrapper"><i class="fa-solid fa-location-dot"></i><select id="stadium-select"
+                        onchange="checkCustomStadium()">
+                        <option value="" disabled selected>Stadion seçin...</option>
+                        <option value="Ruslan93 Stadionu">Ruslan93 Stadionu</option>
+                        <option value="Amasiya Stadionu">Amasiya Stadionu</option>
+                        <option value="Binəqədi">Binəqədi Azfar</option>
+                        <option value="Nərimanov">Nərimanov Azfar</option>
+                        <option value="Yasamal Sportster">Yasamal Sportster</option>
+                        <option value="Digər">Digər (Özün yaz)</option>
+                    </select></div>
+                <div class="input-wrapper" id="custom-stadium-wrapper" style="display: none;"><i
+                        class="fa-solid fa-pen"></i><input type="text" id="custom-stadium"
+                        placeholder="Stadion adını bura yazın"></div>
+                <div class="input-wrapper"><i class="fa-solid fa-clock"></i><input type="datetime-local" id="time">
+                </div>
+                <div class="input-wrapper"><i class="fa-solid fa-manat-sign"></i><input type="number" id="price"
+                        placeholder="Qiymət (AZN)"></div>
+                <div id="player-count-wrapper">
+                    <div class="input-wrapper"><i class="fa-solid fa-users-viewfinder"></i><input type="number"
+                            id="player-count" min="1" max="11" placeholder="Neçə nəfər çatışmır?"
+                            oninput="generatePositionInputs()"></div>
+                    <div id="dynamic-positions"
+                        style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;"></div>
+                </div>
+            </div>
+            <div id="player-inputs" class="form-section animate-fade" style="display: none;">
+                <div class="input-wrapper"><i class="fa-solid fa-pen"></i><input type="text" id="note"
+                        placeholder="Özün haqqında qeyd (məs: Cümə günü boşam)"></div>
+            </div><button class="action-btn submit-btn" onclick="submitAd()">Elanı Paylaş <i
+                    class="fa-solid fa-check"></i></button>
+        </div>
+    </div>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content"><span class="close" onclick="closeModal('infoModal')">&times;</span>
+            <h2><i class="fa-solid fa-user"></i> Əlaqə</h2>
+            <div id="info-modal-body" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <div id="share-poster-template"
+        style="position: fixed; top: -9999px; left: -9999px; width: 400px; background: linear-gradient(135deg, #141414, #0a0a0a); color: #fff; padding: 40px 30px; border-radius: 24px; border: 3px solid #caff04; font-family: 'Inter', sans-serif; box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: -1;">
+        <h2
+            style="color: #caff04; text-align: center; margin-bottom: 25px; font-size: 28px; font-weight: 800; text-transform: uppercase; letter-spacing: -1px;">
+            <i class="fa-solid fa-futbol"></i> AURA<span>HUB</span></h2>
+        <div id="poster-badge"
+            style="text-align: center; background: #caff04; color: #000; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 14px; width: fit-content; margin: 0 auto 25px;">
+            RƏQİB AXTARILIR</div>
+        <h3 id="poster-title" style="text-align: center; font-size: 26px; margin-bottom: 20px; line-height: 1.3;">
+            Stadion Adı</h3>
+        <div
+            style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 16px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.1);">
+            <p style="margin-bottom: 15px; font-size: 18px; display: flex; align-items: center; gap: 10px;"><i
+                    class="fa-solid fa-clock" style="color:#caff04;"></i> <strong id="poster-time">Vaxt</strong></p>
+            <p id="poster-desc" style="font-size: 16px; line-height: 1.6; color: #ddd;">Detallar</p>
+        </div>
+        <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+            <p style="color: #caff04; font-size: 16px; font-weight: 600; margin-bottom: 5px;">Sayta daxil ol, sən də
+                oyna!</p>
+            <p style="color: #888; font-size: 13px;">🌐 www.aurahub.az</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="module" src="app.js"></script>
 </body>
+
 </html>
