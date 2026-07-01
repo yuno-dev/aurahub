@@ -1936,13 +1936,106 @@ html {
 .modal-content {
     padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
-/* Tutorial Highlight Effekti */
-/* Tutorial Highlight Effekti */
+/* ========================================================
+   10000x BETTER TUTORIAL UI (PREMIUM GLASSMORPHISM)
+======================================================== */
+
+/* Tooltip (Məlumat Qutusu) */
+.modern-tooltip {
+    position: absolute;
+    background: rgba(25, 25, 25, 0.85); /* Tünd, şəffaf şüşə effekti */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Çox zərif ağ çərçivə */
+    color: #fff;
+    padding: 24px;
+    border-radius: 16px;
+    width: 290px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Elastik (bouncy) hərəkət */
+}
+
+/* Yuxarıdakı "Addım" nişanı */
+.step-badge {
+    display: inline-block;
+    background: rgba(202, 255, 4, 0.15);
+    color: var(--primary);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(202, 255, 4, 0.3);
+}
+
+/* Əsas Mətn */
+.tooltip-body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #e0e0e0;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+/* Düymələrin düzülüşü */
+.tooltip-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Keç Düyməsi */
+.skip-btn {
+    background: transparent;
+    color: #888;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.skip-btn:hover { color: #fff; }
+
+/* İrəli Düyməsi */
+.next-btn {
+    background: var(--primary);
+    color: #000;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(202, 255, 4, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.next-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(202, 255, 4, 0.5);
+}
+
+/* --- VURĞULANAN ELEMENTİN ANİMASİYASI --- */
+/* Kobud qutunu ləğv etdik, əvəzinə zərif radar parlaması (pulse) əlavə etdik */
 .tutorial-highlight {
     position: relative !important;
     z-index: 10000 !important;
-    box-shadow: 0 0 0 4px var(--primary), 0 0 40px var(--primary) !important;
-    background-color: transparent !important; /* Düymənin öz rəngini pozmasın */
+    background-color: transparent !important;
     border-radius: 8px;
-    pointer-events: none; 
+    pointer-events: none;
+    animation: modernPulse 2s infinite; /* Radar dalğası yaradır */
+}
+
+@keyframes modernPulse {
+    0% { box-shadow: 0 0 0 0 rgba(202, 255, 4, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(202, 255, 4, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(202, 255, 4, 0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
