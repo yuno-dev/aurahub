@@ -98,13 +98,18 @@ window.updateNav = function() {
         }
         nav.innerHTML = `${adminBtn} <button class="action-btn" onclick="openProfile()"><i class="fa-solid fa-user"></i> ${currentUser.username}</button>`;
     } else {
-        nav.innerHTML = `<button class="action-btn" onclick="openModal('loginModal')">Daxil Ol</button>`;
+        // DÜZƏLİŞ: loginModal əvəzinə authModal oldu
+        nav.innerHTML = `<button class="action-btn" onclick="openModal('authModal')">Daxil Ol</button>`;
     }
 };
 
 window.requireAuth = function(actionCallback) {
     if (currentUser) actionCallback();
-    else { openModal('loginModal'); showToast("Zəhmət olmasa əvvəlcə daxil olun.", "error"); }
+    else { 
+        // DÜZƏLİŞ: authModal açılır
+        openModal('authModal'); 
+        showToast("Zəhmət olmasa əvvəlcə daxil olun.", "error"); 
+    }
 };
 
 window.openModal = function(id) { document.getElementById(id).style.display = 'flex'; };
