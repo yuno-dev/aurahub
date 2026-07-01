@@ -166,11 +166,19 @@ async function hashPassword(password) {
 }
 
 // --- AUTH MODAL TABLARINI DƏYİŞMƏK ---
+// --- AUTH MODAL TABLARINI DƏYİŞMƏK ---
 window.switchAuthTab = function(tab) {
-    document.getElementById('tab-login-btn').classList.toggle('active', tab === 'login');
-    document.getElementById('tab-register-btn').classList.toggle('active', tab === 'register');
-    document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
-    document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+    const loginBtn = document.getElementById('tab-login-btn');
+    const regBtn = document.getElementById('tab-register-btn');
+    const loginForm = document.getElementById('login-form');
+    const regForm = document.getElementById('register-form');
+
+    // Əgər elementlər varsa, klasslarını və görünüşlərini dəyişirik
+    if (loginBtn) loginBtn.classList.toggle('active', tab === 'login');
+    if (regBtn) regBtn.classList.toggle('active', tab === 'register');
+    
+    if (loginForm) loginForm.style.display = tab === 'login' ? 'block' : 'none';
+    if (regForm) regForm.style.display = tab === 'register' ? 'block' : 'none';
 };
 
 // --- YENİ QEYDİYYAT SİSTEMİ ---
