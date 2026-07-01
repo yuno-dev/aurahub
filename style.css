@@ -2039,3 +2039,156 @@ html {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+/* ========================================================
+   ULTRA MODERN AUTH MODAL (GLASSMORPHISM)
+======================================================== */
+.modern-modal-overlay {
+    background: rgba(5, 5, 5, 0.8) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+}
+
+.modern-modal-content {
+    background: rgba(25, 25, 25, 0.6);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 28px;
+    padding: 40px 30px;
+    width: 90%;
+    max-width: 420px;
+    margin: auto;
+    position: relative;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+    animation: modalSlideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(50px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modern-close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 28px;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.modern-close:hover { color: #fff; transform: rotate(90deg) scale(1.1); }
+
+.auth-header { text-align: center; margin-bottom: 25px; }
+.auth-logo { width: 55px; height: 55px; margin-bottom: 15px; filter: drop-shadow(0 0 15px rgba(202, 255, 4, 0.4)); }
+.auth-header h2 { font-size: 24px; color: #fff; font-weight: 800; letter-spacing: 0.5px; margin: 0; }
+
+/* iOS Segmented Control Tabları */
+.segmented-control {
+    position: relative;
+    display: flex;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 14px;
+    padding: 5px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.segment-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 0;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.3s;
+}
+.segment-btn.active { color: #000; }
+.segment-highlight {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: calc(50% - 5px);
+    height: calc(100% - 10px);
+    background: var(--primary);
+    border-radius: 10px;
+    z-index: 1;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 5px 15px rgba(202, 255, 4, 0.3);
+}
+
+.auth-hint {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+/* Modern Inputlar */
+.modern-input-group { position: relative; margin-bottom: 16px; }
+.input-row { display: flex; gap: 12px; }
+.half-width { flex: 1; }
+
+.modern-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 16px 16px 16px 48px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+.modern-input::placeholder { color: #666; font-weight: 400; }
+.input-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 15px;
+    transition: color 0.3s ease;
+}
+
+/* Hover & Focus Effektləri */
+.modern-input:hover { border-color: rgba(255,255,255,0.2); }
+.modern-input:focus {
+    border-color: var(--primary);
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 0 4px rgba(202, 255, 4, 0.1);
+}
+.modern-input:focus ~ .input-icon { color: var(--primary); }
+
+.custom-select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+.custom-select option { background: #1e1e1e; color: #fff; }
+
+/* Qalın Premium Düymə */
+.modern-submit-btn {
+    width: 100%;
+    background: var(--primary);
+    color: #000;
+    border: none;
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(202, 255, 4, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.modern-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(202, 255, 4, 0.4);
+}
+.modern-submit-btn:active { transform: translateY(1px); }
