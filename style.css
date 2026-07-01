@@ -1936,3 +1936,12 @@ html {
 .modal-content {
     padding-bottom: calc(20px + env(safe-area-inset-bottom));
 }
+/* Tutorial Highlight Effekti */
+.tutorial-highlight {
+    position: relative !important;
+    z-index: 10000 !important;
+    box-shadow: 0 0 0 5px var(--primary), 0 0 20px var(--primary) !important;
+    background-color: #141414 !important;
+    border-radius: 8px;
+    pointer-events: none; /* Üzərinə basmağı qadağan edirik */
+}

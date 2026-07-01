@@ -287,20 +287,68 @@
 
     <div id="toast-container"></div>
 
-    <div id="loginModal" class="modal">
-        <div class="modal-content"><span class="close" onclick="closeModal('loginModal')">&times;</span>
-            <h2><i class="fa-solid fa-right-to-bracket"></i> Sistemə Daxil Ol</h2>
-            <div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" id="username"
-                    placeholder="Ad, Soyad"></div>
-            <div class="input-wrapper"><i class="fa-solid fa-calendar-days"></i><input type="number" id="age"
-                    placeholder="Yaş"></div>
-            <div class="input-wrapper"><i class="fa-solid fa-shoe-prints"></i><select id="position">
-                    <option value="Hücumçu">Hücumçu</option>
-                    <option value="Yarımmüdafiəçi">Yarımmüdafiəçi</option>
-                    <option value="Müdafiəçi">Müdafiəçi</option>
-                    <option value="Qapıçı">Qapıçı</option>
-                </select></div><button class="action-btn submit-btn" onclick="login()">Giriş Et <i
-                    class="fa-solid fa-arrow-right"></i></button>
+<!-- YENİ GİRİŞ VƏ QEYDİYYAT MODALI -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('authModal')">&times;</span>
+            <div class="filter-tabs" style="border:none; margin-bottom: 20px; justify-content: center;">
+                <button class="action-btn" onclick="openModal('authModal')">Daxil Ol</button>
+                <button class="tab-btn" id="tab-register-btn" onclick="switchAuthTab('register')">Qeydiyyat</button>
+            </div>
+
+            <!-- Daxil Ol Formu -->
+            <div id="login-form">
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="login-username" placeholder="İstifadəçi adı (Nickname)">
+                </div>
+                <div class="input-wrapper" style="margin-top:10px;">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Şifrə">
+                </div>
+                <button class="login-btn" style="width: 100%; margin-top: 20px;" onclick="submitLogin()">Sistemə Gir</button>
+            </div>
+
+            <!-- Qeydiyyat Formu -->
+            <div id="register-form" style="display:none;">
+                <p style="font-size: 11px; color:var(--text-muted); margin-bottom: 10px; text-align:center;">Real adınızı istifadə etməyiniz tövsiyə olunur, lakin istədiyiniz unikal Nickname seçə bilərsiniz.</p>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user-tag"></i>
+                    <input type="text" id="reg-username" placeholder="İstifadəçi adı (Məs: Onur)">
+                </div>
+                <div class="input-wrapper" style="margin-top:10px;">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="reg-password" placeholder="Şifrə (Min. 8 simvol, 1 hərf)">
+                </div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <div class="input-wrapper" style="flex:1;">
+                        <i class="fa-solid fa-calendar"></i>
+                        <input type="number" id="reg-age" placeholder="Yaş">
+                    </div>
+                    <div class="input-wrapper" style="flex:1;">
+                        <i class="fa-solid fa-shirt"></i>
+                        <select id="reg-position" style="background:transparent; border:none; color:#fff; width:100%; outline:none;">
+                            <option value="Hücumçu" style="color:#000;">Hücumçu</option>
+                            <option value="Yarımmüdafiəçi" style="color:#000;">Yarımmüdafiəçi</option>
+                            <option value="Müdafiəçi" style="color:#000;">Müdafiəçi</option>
+                            <option value="Qapıçı" style="color:#000;">Qapıçı</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="login-btn" style="width: 100%; margin-top: 20px;" onclick="submitRegister()">Hesab Yarat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TUTORIAL (BƏLƏDÇİ) OVERLAY -->
+    <div id="tutorial-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999;">
+        <div id="tutorial-tooltip" style="position:absolute; background:var(--primary); color:#000; padding:15px; border-radius:12px; width:260px; box-shadow: 0 5px 25px rgba(202, 255, 4, 0.4); transition: all 0.3s ease;">
+            <div id="tutorial-step-badge" style="font-size:10px; font-weight:bold; color:var(--danger); margin-bottom:5px;">TİP 1/3</div>
+            <p id="tutorial-text" style="font-weight:bold; margin-bottom:15px; font-size: 14px;"></p>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <button onclick="skipTutorial()" style="background:transparent; color:#000; font-size:12px; font-weight:bold; border:none; cursor:pointer;">Keç (Skip)</button>
+                <button onclick="nextTutorialStep()" style="background:#000; color:#fff; padding:6px 15px; font-size:12px; border:none; border-radius:6px; cursor:pointer;">İrəli <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
         </div>
     </div>
 <div id="adminModal" class="modal">

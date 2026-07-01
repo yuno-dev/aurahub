@@ -152,25 +152,96 @@ window.syncUserToDB = async function() {
     }
 };
 
-window.login = async function() {
-    const username = document.getElementById('username').value;
-    const age = document.getElementById('age').value;
-    const position = document.getElementById('position').value;
+// --- ŞİFRƏNİ KRİPTOQRAFİK HASH ETMƏK ---
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
-    if (!username || !age) return showToast("Bütün xanaları doldurun!", "error");
+// --- AUTH MODAL TABLARINI DƏYİŞMƏK ---
+window.switchAuthTab = function(tab) {
+    document.getElementById('tab-login-btn').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-register-btn').classList.toggle('active', tab === 'register');
+    document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+};
 
-    const existingUser = allUsers.find(u => u.username === username);
+// --- YENİ QEYDİYYAT SİSTEMİ ---
+window.submitRegister = async function() {
+    const username = document.getElementById('reg-username').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const age = document.getElementById('reg-age').value;
+    const position = document.getElementById('reg-position').value;
+
+    if (!username || !password || !age) return showToast("Bütün xanaları doldurun!", "error");
     
-    if (existingUser) {
-        currentUser = existingUser;
-    } else {
-        currentUser = { username, age, position, skill: "Orta", teamName: "", avatar: "https://cdn-icons-png.flaticon.com/512/847/847969.png", stats: { accepted: 0, attended: 0 }, isPro: false, roster: [username] };
+    // Şifrə Yoxlanışı: Min 8 simvol və ən azı 1 hərf
+    if (password.length < 8 || !/[a-zA-Z]/.test(password)) {
+        return showToast("Şifrə minimum 8 simvol olmalı və tərkibində hərf olmalıdır!", "error");
     }
+
+    // Unikal Ad yoxlanışı (Bütün adları kiçik hərflə müqayisə edirik)
+    const exists = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
+    if (exists) return showToast("Bu istifadəçi adı artıq tutulub! Fərqli ad seçin.", "error");
+
+    const hashedPassword = await hashPassword(password);
+
+    // Yeni İstifadəçi Obyekti (Firestore id-si lowercase olaraq yazılacaq)
+    currentUser = { 
+        username: username, // Original case (Məs: oNur) ekranda göstərmək üçündür
+        password: hashedPassword,
+        age: age, 
+        position: position, 
+        skill: "Orta", 
+        teamName: "", 
+        avatar: "https://cdn-icons-png.flaticon.com/512/847/847969.png", 
+        stats: { accepted: 0, attended: 0 }, 
+        isPro: false, 
+        roster: [username] 
+    };
 
     localStorage.setItem('aurahub_logged_in_user', currentUser.username);
     await syncUserToDB(); 
     
-    closeModal('loginModal'); updateNav(); renderTopPlayers(); showToast(`Xoş gəldin, ${username}!`);
+    closeModal('authModal'); 
+    updateNav(); 
+    renderTopPlayers(); 
+    showToast(`Aramıza xoş gəldin, ${username}!`);
+    
+    // YENİ QEYDİYYAT OLDUĞU ÜÇÜN BƏLƏDÇİNİ (TUTORIAL) BAŞLADIRIQ
+    setTimeout(startTutorial, 500); 
+};
+
+// --- DAXİL OL (LOGIN) SİSTEMİ ---
+window.submitLogin = async function() {
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    if (!username || !password) return showToast("Məlumatları tam daxil edin!", "error");
+
+    // Adı kiçik hərflərlə axtarırıq (istifadəçi ONUR da yazsa, onur da yazsa tapacaq)
+    const existingUser = allUsers.find(u => u.username.toLowerCase() === username.toLowerCase());
+    
+    if (!existingUser) return showToast("Belə bir istifadəçi tapılmadı!", "error");
+
+    const hashedPassword = await hashPassword(password);
+    if (existingUser.password !== hashedPassword) return showToast("Şifrə yalnışdır!", "error");
+
+    currentUser = existingUser;
+    localStorage.setItem('aurahub_logged_in_user', currentUser.username);
+    
+    closeModal('authModal'); 
+    updateNav(); 
+    renderTopPlayers(); 
+    showToast(`Xoş gəldin, ${currentUser.username}!`);
+};
+
+// Köhnə openModal('loginModal') çağırışlarını 'authModal' olaraq yeniləyirik
+window.requireAuth = function(actionCallback) {
+    if (currentUser) actionCallback();
+    else { openModal('authModal'); showToast("Zəhmət olmasa əvvəlcə daxil olun.", "error"); }
 };
 
 window.switchProfileTab = function(tabName, btnElement) {
@@ -982,3 +1053,67 @@ window.deleteUserAsAdmin = async function(username) {
         window.loadAdminUsers();
     }
 };
+// --- TUTORIAL (BƏLƏDÇİ) MƏNTİQİ ---
+let tutorialStep = 0;
+let currentHighlightedEl = null;
+
+const tutorialSteps = [
+    { targetId: 'nav-home', text: 'TİP 1: Bura sənin ana səhifəndir. Elanları və oyunçuları burdan tapa bilərsən.' },
+    { targetId: 'nav-champ', text: 'TİP 2: Çempionatlar! Bu ay aktiv turnir olub-olmadığını burdan yoxlaya bilərsən.' },
+    { targetId: null, text: 'TİP 3: Mükəmməlsən! İndi sağ yuxarıdan profilinə gir və özünə "cool" bir profil şəkli yüklə. Uğurlar! 🚀' }
+];
+
+window.startTutorial = function() {
+    tutorialStep = 0;
+    document.getElementById('tutorial-overlay').style.display = 'block';
+    renderTutorialStep();
+};
+
+window.nextTutorialStep = function() {
+    tutorialStep++;
+    if (tutorialStep >= tutorialSteps.length) {
+        skipTutorial();
+    } else {
+        renderTutorialStep();
+    }
+};
+
+window.skipTutorial = function() {
+    document.getElementById('tutorial-overlay').style.display = 'none';
+    if(currentHighlightedEl) currentHighlightedEl.classList.remove('tutorial-highlight');
+    tutorialStep = 0;
+};
+
+function renderTutorialStep() {
+    if(currentHighlightedEl) currentHighlightedEl.classList.remove('tutorial-highlight');
+    
+    const step = tutorialSteps[tutorialStep];
+    document.getElementById('tutorial-step-badge').innerText = `TİP ${tutorialStep + 1} / ${tutorialSteps.length}`;
+    document.getElementById('tutorial-text').innerText = step.text;
+    
+    const tooltip = document.getElementById('tutorial-tooltip');
+
+    if (step.targetId) {
+        const el = document.getElementById(step.targetId);
+        if(el) {
+            el.classList.add('tutorial-highlight');
+            currentHighlightedEl = el;
+            
+            // Elementin koordinatlarını tapıb tooltipi yanına qoyuruq
+            const rect = el.getBoundingClientRect();
+            tooltip.style.top = (rect.top - 120) + 'px'; 
+            tooltip.style.left = '50%';
+            tooltip.style.transform = 'translateX(-50%)';
+            
+            // Əgər element yuxarıdadırsa, tooltipi onun altına salırıq
+            if (rect.top < 150) {
+                tooltip.style.top = (rect.bottom + 20) + 'px';
+            }
+        }
+    } else {
+        // Son addımda (targetId: null) tooltipi ekranın tam ortasına qoyuruq
+        tooltip.style.top = '50%';
+        tooltip.style.left = '50%';
+        tooltip.style.transform = 'translate(-50%, -50%)';
+    }
+}
