@@ -2057,10 +2057,10 @@ html {
 }
 
 .modern-modal-content {
-    background: rgba(25, 25, 25, 0.6);
+    background: rgba(35, 35, 35, 0.85); /* Qutunu biraz aydınlatdıq ki görünsün */
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15); /* Çərçivəni daha aydın etdik */
     border-radius: 28px;
     padding: 40px 30px;
     width: 90%;
@@ -2069,6 +2069,31 @@ html {
     position: relative;
     box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
     animation: modalSlideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.input-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 15px;
+    z-index: 2; /* İkonların xananın üstündə olmasını sığortalayır */
+    transition: color 0.3s ease;
+}
+
+.modern-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 16px 16px 16px 48px; /* Soldan ikon üçün 48px boşluq buraxır */
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
 @keyframes modalSlideUp {
@@ -2140,19 +2165,6 @@ html {
 .input-row { display: flex; gap: 12px; }
 .half-width { flex: 1; }
 
-.modern-input {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 16px 16px 16px 48px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 500;
-    outline: none;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
 .modern-input::placeholder { color: #666; font-weight: 400; }
 .input-icon {
     position: absolute;
